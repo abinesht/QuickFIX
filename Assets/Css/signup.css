@@ -1,0 +1,117 @@
+body {
+  background: none;
+}
+
+@media (max-width: 768px) {
+  #weare {
+    color: white;
+    font-family: Quikhand;
+    font-size: 10vw;
+  }
+  #tohelp {
+    color: yellow;
+    font-weight: bold;
+    font-family: Malgun Gothic;
+    font-size: 15vw;
+  }
+  #you {
+    color: white;
+    font-family: Tahoma, Verdana, Segoe, sans-serif;
+    font-size: 13vw;
+  }
+}
+@media (min-width: 768px) {
+  #weare {
+    color: white;
+    font-family: Quikhand;
+    font-size: calc(2em + 2vw);
+  }
+  #tohelp {
+    color: yellow;
+    font-weight: bold;
+    font-family: Malgun Gothic;
+    font-size: calc(2em + 4vw);
+  }
+  #you {
+    color: white;
+    font-family: Tahoma, Verdana, Segoe, sans-serif;
+    font-size: calc(2em + 3vw);
+  }
+  .copyright {
+    position: absolute;
+    bottom: 0;
+  }
+}
+
+#rightside {
+  background: url("../Images/cover.jpg");
+  background-size: cover;
+  padding: 0;
+}
+.trans-box {
+  background-color: #142f61;
+  opacity: 0.7;
+}
+
+.sign-button {
+  background-color: #142f61;
+  font-weight: bold;
+}
+#cu-signup {
+  border-bottom: 4px solid #142f61;
+  width: 41%;
+  font-weight: bold;
+  margin-top: 2%;
+  margin-left: 9%;
+}
+.help {
+  background-color: #142f61;
+  font-weight: bold;
+  border: none;
+}
+
+.help:focus {
+  box-shadow: none;
+  background-color: #142f61;
+}
+.help:hover {
+  background-color: #1d345f;
+}
+
+#Loginacc {
+  color: #142f61;
+}
+.eye {
+  background-color: white;
+  border-left: none;
+  color: #142f61;
+}
+#eye-icon-open-cp {
+  display: none;
+}
+#eye-icon-open-p {
+  display: none;
+}
+
+.map {
+  background-color: white;
+  border-left: none;
+  color: #142f61;
+}
+.SignupInputFile{
+  width: 0.1px;
+  height: 0.1px; 
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+.SignupDp{
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  margin: 0 auto;
+  object-fit: cover;
+
+}

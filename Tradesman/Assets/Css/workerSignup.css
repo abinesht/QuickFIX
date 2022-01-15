@@ -1,0 +1,22 @@
+.register{
+    background-color:#142F61;
+    font-weight: bold;
+    border: none;
+    
+}
+
+.register:focus{
+    box-shadow: none;
+    background-color: #142F61;
+}
+.register:hover{
+    background-color:#1d345f;
+}
+.form-checkbox:checked {
+    background-color: #1d345f;
+}
+
+
+.form-textarea{
+    resize: none;
+}
