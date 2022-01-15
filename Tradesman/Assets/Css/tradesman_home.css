@@ -1,0 +1,329 @@
+@font-face {
+        font-family: 'malgun';
+        src: url(fonts/malgun.ttf);
+    }
+
+    @font-face {
+        font-family: 'quikhand';
+        src: url(fonts/Quikhand.otf);
+    }
+
+    @font-face {
+        font-family: 'tahoma';
+        src: url(fonts/Tahoma\ Regular\ font.ttf);
+    }
+
+    .cover {
+        position: relative;
+    }
+
+    .cover .coverimg {
+        background: url("Assets/Images/cover_xl.jpg");
+        min-height: 53vh;
+        width: 100%;
+        background-size: cover;
+    }
+
+    .cover .coveroverlay {
+        min-height: 53vh;
+        width: 100%;
+        background: linear-gradient(to right, #142f61, #2b477c, rgb(243, 243, 150));
+        opacity: 0.8;
+    }
+
+    .container {
+        padding-top: 120px;
+        padding-bottom: 20px;
+    }
+
+    .weAreHere {
+        font-size: calc(13px + 3vw);
+        font-family: 'quikhand', Arial, Helvetica, sans-serif;
+        color: white;
+    }
+
+    .toHelp {
+        font-size: calc(25px + 4vw);
+        font-family: 'malgun', Arial, Helvetica, sans-serif;
+        color: #F6E92F;
+        font-weight: bold;
+        line-height: 0.5;
+    }
+
+    .you {
+        font-size: calc(17px + 3vw);
+        font-family: 'tahoma', Arial, Helvetica, sans-serif;
+        color: white;
+        line-height: 1.1;
+        position: relative;
+        top : 1rem;
+        
+    }
+
+    @media (max-width: 1200px) {
+        .cover .coverimg {
+            min-height: 49vh;
+        }
+
+        .cover .coveroverlay {
+            min-height: 49vh;
+        }
+
+        .container {
+            padding-top: 120px;
+        }
+    }
+
+    @media (max-width: 1200px) {
+        .cover .coverimg {
+            min-height: 48vh;
+        }
+
+        .cover .coveroverlay {
+            min-height: 48vh;
+        }
+
+        .container {
+            padding-top: 120px;
+        }
+    }
+
+    @media (max-width: 992px) {
+        .cover .coverimg {
+            min-height: 45vh;
+        }
+
+        .cover .coveroverlay {
+            min-height: 45vh;
+        }
+
+        .container {
+            padding-top: 110px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .cover .coverimg {
+            min-height: 42vh;
+
+        }
+
+        .cover .coveroverlay {
+            min-height: 42vh;
+        }
+
+        .container {
+            padding-top: 90px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .cover .coverimg {
+            min-height: 38vh;
+        }
+
+        .cover .coveroverlay {
+            min-height: 38vh;
+        }
+
+        .container {
+            padding-top: 75px;
+        }
+
+        .weAreHere {
+            font-size: calc(20px + 3vw);
+        }
+
+        .toHelp {
+            font-size: calc(35px + 4vw);
+        }
+
+        .you {
+            font-size: calc(28px + 3vw);
+        }
+    }
+
+
+    @media (max-width: 470px) {
+        .cover .coverimg {
+            min-height: 35vh;
+        }
+
+        .cover .coveroverlay {
+            min-height: 35vh;
+        }
+
+        .container {
+            padding-top: 80px;
+        }
+
+        .weAreHere {
+            font-size: calc(20px + 3vw);
+        }
+
+        .toHelp {
+            font-size: calc(35px + 4vw);
+        }
+
+        .you {
+            font-size: calc(25px + 3vw);
+        }
+    }
+
+/* ------------------------------------------------------------------------- */
+    .calendar {
+      display: flex;
+      flex-flow: column;
+    }
+
+    .calendar .days {
+      display: flex;
+      flex-flow: wrap;
+    }
+
+    .calendar .days .day_name {
+      width: calc(100% / 7);
+      border-right: 1px solid #ffffff;
+      padding: 0.25rem;
+      text-transform: none;
+      font-size: 0.75rem;
+      font-weight: bold;
+      color: #818589;
+      color: #fff;
+      background-color: #142f61;
+    }
+
+    .calendar .days .day_name:nth-child(7) {
+      border: none;
+    }
+
+    .calendar .days .day_num {
+      display: flex;
+      flex-flow: column;
+      width: calc(100% / 7);
+      border-right: 1px solid #000000;
+      border-bottom: 1px solid #000000;
+      padding: 2px;
+      font-weight: bold;
+      color: #000000;
+      cursor: pointer;
+      min-height: 50px !important;
+      max-height: 50px !important;
+    }
+
+    .calendar .days .day_num span {
+      display: inline-flex;
+      width: 30px;
+      font-size: 14px;
+    }
+
+    .calendar .days .day_num .scheduled_event {
+      margin-top: -13px;
+      font-weight: 500;
+      font-size: 14px;
+      padding-left: 10px;
+      color: rgb(0, 0, 0);
+      max-height: 50px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .calendar .days .day_num:nth-child(7n + 1) {
+      border-left: 1px solid #000000;
+    }
+
+    .calendar .days .day_num:hover {
+      background-color: #fdfdfde8;
+    }
+
+    .calendar .days .day_num.ignore_dates {
+      background-color: #fdfdfd;
+      color: #ced2d4;
+      cursor: inherit;
+    }
+
+    .calendar .days .day_num.selected {
+      background-color: #f1f2f3;
+      cursor: inherit;
+    }
+
+    .horizontal_line_customer {
+      border-top: 6px solid #142f61;
+      /* height: 25rem; */
+      width: 22rem;
+      position: relative;
+      /* right: 60%; */
+      top: -1rem;
+    }
+
+    .new1 {
+      border: 6px solid #142f61;
+      width: 6rem;
+    }
+
+    #schedule_list {
+      margin: auto;
+    }
+
+    #calendar_box {
+      border: 6px solid #142f61;
+      border-width: 0 0 0 0.4rem;
+      padding-left: 2rem;
+    }
+
+    @media (max-width: 992px) {
+      #calendar_box {
+        border: 6px hidden #142f61;
+      }
+
+      .horizontal_line_customer {
+        border-top: 6px solid #142f61;
+        position: relative;
+        top: -1rem;
+        padding-top: 2rem;
+        width: 18rem;
+      }
+    }
+
+    /* --------------------------------------------------------------- */
+    .horizontal_line_customer {
+      border-top: 6px solid #142f61;
+      width: 22rem;
+      position: relative;
+      top: -1rem;
+    }
+
+    #job_images {
+      width: 15rem;
+      height: 10rem;
+      border-radius: 2rem;
+      padding: 1rem;
+    }
+    /* #exceptCoverPhoto{
+      position: relative;
+      top:12rem;
+    } */
+    /* #job{
+        border-bottom: 0.18rem solid #0d56dd;
+        padding-bottom: 0.5rem;
+       } */
+    #star {
+      color: #df8918;
+      position: relative;
+      top: 0.4rem;
+    }
+
+    #box {
+      border-bottom: 0.2rem solid #142f61;
+    }
+
+    #topServices {
+      border-bottom: 0.4rem solid #142f61;
+    }
+
+    @media (max-width: 768px) {
+      #service_detail {
+        align-items: center;
+      }
+    }

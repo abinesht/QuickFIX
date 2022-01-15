@@ -1,0 +1,21 @@
+.done{
+    background-color:#142F61;
+    font-weight: bold;
+    border: none;
+    
+}
+
+.done:focus{
+    box-shadow: none;
+    background-color: #142F61;
+}
+.done:hover{
+    background-color:#1d345f;
+}
+
+#fixed_map {
+    height: 22rem;
+    /* width: 50rem; */
+    background-color: rgb(218, 236, 247);
+    border:  solid #142f61;
+  }

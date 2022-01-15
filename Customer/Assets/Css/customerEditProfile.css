@@ -1,0 +1,139 @@
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+  .card1{
+    width: 75%; 
+    height: 90%;
+    
+  }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+  .card1{
+  width: 85%; 
+  height: 90%;
+}}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+  .card1{
+    width: 25%; 
+    height: 45%;
+  }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+  .card1{
+    width: 29%; 
+    height: 50%;
+  }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+  .card1{
+    width:30%; 
+    height: 54%;
+  }
+}
+
+.card {
+  margin-top: 2em;
+  padding: 1.5em 0.5em 0.5em;
+  border-radius: 2em;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+
+}
+.card1 img {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  margin: 0 auto;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  object-fit: cover;
+
+}
+.card1 .card-title {
+  font-weight: 700;
+  font-size: 1.5em;
+}
+.card1 .btn {
+  border-radius: 2em;
+  background-color: #142f61;
+  color: #ffffff;
+  padding: 0.5em 1.5em;
+}
+.card1 .btn:hover {
+  background-color: #1d345f;
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+#cu-edit {
+  border-bottom: 4px solid #142f61;
+  width: 15em;
+  font-weight: bold;
+  padding-top: 2%;
+  margin-left: 1%;
+}
+
+#ac-inform {
+  border-bottom: 4px solid #142f61;
+  width: 13em;
+  font-weight: bold;
+}
+.upload {
+  background-color: #142f61;
+  font-weight: bold;
+  font-size: large;
+  border: none;
+  color: rgb(255, 255, 255);
+}
+
+.upload:focus {
+  box-shadow: none;
+  background-color: #142f61;
+}
+.upload:hover {
+  background-color: #1d345f;
+}
+.savechanges{
+  background-color:#142F61;
+  font-weight: bold;
+  border: none;
+}
+
+.savechanges:focus{
+  box-shadow: none;
+  background-color: #142F61;
+}
+.savechanges:hover{
+  background-color:#1d345f;
+}
+
+/* password Eye icon open close */
+#eye-icon-open-cup {
+  display: none;
+}
+#eye-icon-open-cip {
+  display: none;
+}
+
+#eye-icon-open-np {
+  display: none;
+}
+
+.inputfile{
+  width: 0.1px;
+  height: 0.1px; 
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+.bodyDiv{
+  background-color: #f6f6f6;
+}

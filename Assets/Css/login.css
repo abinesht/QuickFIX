@@ -1,0 +1,118 @@
+@media (max-width: 576px) { 
+  
+    #weare{
+        color:white;
+        font-family: Quikhand;
+        font-size: 10vw;
+    }
+    #tohelp{
+        color:yellow;
+        font-weight:bold;
+        font-family: Malgun Gothic;
+        font-size: 15vw;
+    }
+    #you{
+        color:white;
+        font-family: Tahoma, Verdana, Segoe, sans-serif;
+        font-size: 13vw;
+    }
+  
+}
+@media (min-width: 576px) { 
+    #weare{
+        color:white;
+        font-family: Quikhand;
+        font-size: calc(2em + 2vw);
+    }
+    #tohelp{
+        color:yellow;
+        font-weight:bold;
+        font-family: Malgun Gothic;
+        font-size: calc(2em + 4vw);
+    }
+    #you{
+        color:white;
+        font-family: Tahoma, Verdana, Segoe, sans-serif;
+        font-size: calc(2em + 3vw);
+    }
+    .copyright{
+        position: absolute;
+        bottom: 0;
+    }
+}
+
+
+body{
+    background: none;
+}
+
+#leftside{
+    background:url("../Images/login.jpg");
+    background-size: cover;
+    padding: 0;
+   
+}
+.trans-box{
+    background-color: #142F61;
+    opacity: 0.8;
+   
+}
+
+.help{
+    background-color:#142F61;
+    font-weight: bold;
+    border: none;
+}
+
+.help:focus{
+    box-shadow: none;
+    background-color: #142F61;
+}
+.help:hover{
+    background-color:#1d345f;
+}
+.help:active:focus {
+    box-shadow: none;
+    color: #ffffff; 
+    background-color: #ffffff; 
+    border-color: #ffffff;
+}
+#forgot{
+    float:right;
+    margin-right: 12%;
+    font-weight: bold;
+    text-decoration: none;
+    color: #000;
+}
+#forgot:hover{
+    text-decoration: underline;
+    color: #142F61;
+}
+.float_clear{
+    clear: both;
+}
+
+#login{
+    border-bottom: 4px solid #142F61;
+    width:30% ;
+    font-weight: bold;
+}
+
+#Signup{
+    color: #142F61;
+}
+
+.eye{
+    background-color: white;
+    border-left: none;
+    color: #142F61;
+}
+#eye-icon-open{
+    display: none;
+}
+.input-icon{
+    background-color: #142F61;
+    color: white;
+
+}
+
