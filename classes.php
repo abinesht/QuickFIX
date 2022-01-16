@@ -32,18 +32,17 @@ class Admin
         // $this->customers->detach($customerNewDetails);
     }
 
-    public function notify($service_name)
+    public function notify($service_name, $newservice_id)
     {
         foreach ($this->customers as $customer) {
-            echo "notify..";
-            $customer->AddNewServiceNotification($service_name,($customer->getCustomer_id()));
+            $customer->AddNewServiceNotification($service_name,($customer->getCustomer_id()), $newservice_id);
             // $customer->sendOffer($this);
         }
     }
 
-    public function sendNotificationALL($service_name)
+    public function sendNotificationALL($service_name , $newservice_id)
     {
-        $this->notify($service_name);
+        $this->notify($service_name, $newservice_id);
     }
 
     // public function addNewService($customer_id, $notificationString, $notificationType)
@@ -78,11 +77,12 @@ class Customer
 
     }
     
-    public function AddNewServiceNotification($service_name,$customer_id)
+    public function AddNewServiceNotification($service_name,$customer_id, $newservice_id)
     {
         // $conn = (new Connection())->createConnection();
+       
         $notificationString= "Admin add new service : " . $service_name;
-        $query = " INSERT INTO notification(notification, receiver_id,sender_id ,notification_type ) VALUES ('$notificationString', '$customer_id',0 , 'ok')";
+        $query = " INSERT INTO notification(notification, receiver_id,sender_id ,notification_type, service_id ) VALUES ('$notificationString', '$customer_id',0 , 'addnewservice', '$newservice_id')";
         QueryHandler::query($query);
     }
 

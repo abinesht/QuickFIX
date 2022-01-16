@@ -1,7 +1,7 @@
 <?php
 include 'header.php';
 include 'calendar.php';
-$tradesman_id = 1;
+$tradesman_id = 17;
 
 $tradesmanObj = new Tradesman();
 $tradesmanObj->read($tradesman_id);
@@ -48,7 +48,7 @@ $tradesmanObj->read($tradesman_id);
         }
     }
 
-    
+
 
     /*------------------------------------------------------------------------*/
     .calendar {
@@ -238,7 +238,7 @@ $tradesmanObj->read($tradesman_id);
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-3" id="photo">
                         <div class="text-center">
-                            <img src= <?php $tradesmanObj->getImg()?> id="workerPhoto" class="" />
+                            <img src=<?php $tradesmanObj->getImg() ?> id="workerPhoto" class="" />
                         </div>
                         <div class="text-center pt-3">@<?= $tradesmanObj->getUsername() ?></div>
                     </div>
@@ -385,19 +385,19 @@ $tradesmanObj->read($tradesman_id);
                                 <div>Name &nbsp; &nbsp; :<span> <?= $customerObject->getFirstname() ?></span></div>
                                 <div>Address &nbsp;:<span> <?= $customerObject->getAddress() ?></span></div>
                                 <div><?= $hiringObject->getRegistered_dateTime(); ?></div>
-                                <?php 
+                                <?php
                                 $serviceID = $hiringObject->getService_id();
                                 $serviceObj = new Service();
                                 $serviceObj->read($serviceID);
-                                 ?>
-                                <div><?= $serviceObj->getService_name();?></div>
+                                ?>
+                                <div><?= $serviceObj->getService_name(); ?></div>
                             </div>
                         </div>
                         <div class="row">
                             <div>
-                                Hiring amount &nbsp;&nbsp; &nbsp;:<span> Rs <?= $hiringObject->getHiring_amount()?>/=</span>
+                                Hiring amount &nbsp;&nbsp; &nbsp;:<span> Rs <?= $hiringObject->getHiring_amount() ?>/=</span>
                             </div>
-                            <div>Payment method :<span> <?= $hiringObject->getPayment_method()?></span></div>
+                            <div>Payment method :<span> <?= $hiringObject->getPayment_method() ?></span></div>
                         </div>
                         <div class="row">
                             <div class="row">
@@ -412,10 +412,10 @@ $tradesmanObj->read($tradesman_id);
                             </div>
                             <div class="row">
                                 <div class="col-3 col-sm-3 col-md-2 col-lg-3 ">Review :</div>
-                                <?php 
-                                if($row['review']==NULL){
+                                <?php
+                                if ($row['review'] == NULL) {
                                     $review = "Not Given";
-                                }elseif($row['review']!=NULL){
+                                } elseif ($row['review'] != NULL) {
                                     $review = $row['review'];
                                 }
                                 ?>
@@ -428,24 +428,24 @@ $tradesmanObj->read($tradesman_id);
             }
 
             ?>
-             </div>
-           
+        </div>
 
-            <!-- ---------------------------------TOP SERVIES------------------------------------------- -->
 
-            <p id="top-services " class="h1 fw-bold p-3">
-                <span id="topServices" class="pe-5">TOP SERVICES</span>
-            </p>
+        <!-- ---------------------------------TOP SERVIES------------------------------------------- -->
 
-            <!-- ---------------------------------PLUMBER  BOX------------------------------------------- -->
-            <div class="row d-flex justify-content-evenly">
+        <p id="top-services " class="h1 fw-bold p-3">
+            <span id="topServices" class="pe-5">TOP SERVICES</span>
+        </p>
+
+        <!-- ---------------------------------PLUMBER  BOX------------------------------------------- -->
+        <div class="row d-flex justify-content-evenly">
             <?php
             require_once('classes.php');
             $sql = "SELECT * FROM service Order by average_rating DESC limit 4;";
-            $result =QueryHandler::query($sql);
+            $result = QueryHandler::query($sql);
             while ($row = mysqli_fetch_array($result)) {
-                    $serviceObject = new Service();
-                    $serviceObject->read($row['service_id']);
+                $serviceObject = new Service();
+                $serviceObject->read($row['service_id']);
 
             ?>
 
@@ -466,7 +466,7 @@ $tradesmanObj->read($tradesman_id);
                             <div class="fw-bolder"><?= $serviceObject->getTotal_hirings() ?> Total Order</div>
                             <div class="fw-bolder">
                                 <p class="">
-                                    Avg Rating  <?= $serviceObject->getAverage_rating() ?>
+                                    Avg Rating <?= $serviceObject->getAverage_rating() ?>
                                     <span id="star" class="material-icons"> grade</span>
                                 </p>
                             </div>
@@ -474,11 +474,11 @@ $tradesmanObj->read($tradesman_id);
                     </div>
                 </div>
 
-                <?php } ?>
+            <?php } ?>
 
-             
-            </div>
+
         </div>
+    </div>
 </body>
 
 </html>
@@ -523,7 +523,7 @@ $tradesmanObj->read($tradesman_id);
                 }
             });
         }
-        
+
         getCount();
 
         function insertNotification(type, sheduleID, view = '') {
@@ -695,11 +695,29 @@ $tradesmanObj->read($tradesman_id);
                 url: "done_ok.php",
                 success: function(data) {
                     load_unseen_notification();
-                    console.log("done clicked....");
+                    console.log(data);
 
                 }
             });
         });
+        $(document).on("click", "#view", function() {
+
+            let del = $(this);
+            let sheduleID = $(this).attr("data-id");
+            $.ajax({
+                type: "get",
+                data: {
+                    sheduleID: sheduleID
+                },
+                url: "deleteNotification.php",
+                success: function(data) {
+                    load_unseen_notification();
+                    console.log(data);
+
+                }
+            });
+        });
+
 
         $(document).on("click", "#done", function() {
 

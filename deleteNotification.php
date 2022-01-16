@@ -13,12 +13,12 @@ $service_id = $notification->getService_id();
 $time = $notification->getTime();
 $date= $notification->getDate();
 
-$hiring_id = $notification->getHiringIDOngoing( $tradesman_id,$customer_id,$service_id,$date,$time);
+// $hiring_id = $notification->getHiringIDOngoing( $tradesman_id,$customer_id,$service_id,$date,$time);
 
 $notification->remove($sheduleID);
 
-$data = $hiring_id;
-echo json_encode($data);
+// $data = $hiring_id;
+// echo json_encode($data);
 
 
 ?>
