@@ -90,8 +90,8 @@ function hidefor($userType,$user)
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script> -->
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>     <!--  This script for dropdown notification view. is I comment this, dropdown not visible. -->
     
     <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" /> -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous" />
@@ -154,11 +154,11 @@ function hidefor($userType,$user)
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
                     <a href="#" id="drop-down" class="dropdown-toggle btn btn-danger" data-toggle="dropdown">
-                        <span class="material-icons"> notifications</span>
+                        <span class="material-icons "> notifications</span>
                         <span class="label label-pill label-danger count" style="border-radius:10px;"></span>
                         <span class="glyphicon glyphicon-envelope" style="font-size:18px;"></span>
                     </a>
-                    <ul class="dropdown-menu"></ul>
+                    <ul class="dropdown-menu "></ul>
                 </li>
             </ul>
 
@@ -259,13 +259,13 @@ function hidefor($userType,$user)
     <script>
         
 
-        $("#site_state").click(function(){
-            $("#toggleBtn").click();
-        });
+        // $("#site_state").click(function(){
+        //     $("#toggleBtn").click();
+        // });
 
-        $("#searchIcon").click(function(){
-            $("#searchBtn").click();
-        });
+        // $("#searchIcon").click(function(){
+        //     $("#searchBtn").click();
+        // });
     </script>
 
 </body>
