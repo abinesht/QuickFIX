@@ -35,6 +35,7 @@ class Admin
     public function notify($service_name)
     {
         foreach ($this->customers as $customer) {
+            echo "notify..";
             $customer->AddNewServiceNotification($service_name,($customer->getCustomer_id()));
             // $customer->sendOffer($this);
         }
@@ -76,6 +77,15 @@ class Customer
     public function __construct(){
 
     }
+    
+    public function AddNewServiceNotification($service_name,$customer_id)
+    {
+        // $conn = (new Connection())->createConnection();
+        $notificationString= "Admin add new service : " . $service_name;
+        $query = " INSERT INTO notification(notification, receiver_id,sender_id ,notification_type ) VALUES ('$notificationString', '$customer_id',0 , 'ok')";
+        QueryHandler::query($query);
+    }
+
     public static function getInstance($customer_id)
     {
         if (!array_key_exists($customer_id, self::$customers)) {
