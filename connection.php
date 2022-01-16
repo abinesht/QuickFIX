@@ -5,7 +5,7 @@ class Database
     public const HOST = "localhost";
     public const USERNAME = "root";
     public const PASSWORD = "";
-    public const NAME = "quickfix";
+    public const NAME = "quickfixfinal1";
 }
 
 abstract class ObjectPool
@@ -76,7 +76,7 @@ class Connection{
 
     public function __construct(String $host, String $dbusername, String $dbpassword, String $dbname)
     {
-        $this->connection = new mysqli($host, $dbusername, $dbpassword, $dbname);
+        $this->connection = new mysqli($host, $dbusername, $dbpassword, $dbname,"3310");
 
         if ($this->connection->connect_errno) {
             echo "Failed to connect to MySQL: " . $this->connection -> connect_error;
