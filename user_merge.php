@@ -31,19 +31,20 @@ include 'header.php';
 
             margin-right: 10px;
         }
+
         #fixed_map {
-        height: 22rem;
-        background-color: rgb(218, 236, 247);
-        border: solid #142f61;
-    }
+            height: 22rem;
+            background-color: rgb(218, 236, 247);
+            border: solid #142f61;
+        }
     </style>
-    
+
 </head>
 
 <body>
     <?php
-    $customerID = 2; // tradesman ID    JB
-    $customer_id_no = 1; // customer ID    
+    $customerID = 1; // tradesman ID    JB
+    $customer_id_no = 18; // customer ID    
     $tradesmanObj = new Tradesman();
     $tradesmanObj->read($customerID);
     ?>
@@ -125,10 +126,10 @@ include 'header.php';
                         <?php
                         if ($tradesmanObj->getActive_status() == 'online') {
                         ?>
-                             <button class="offset-3 col-6 btn btn-sm fw-bold text-white rounded-pill " disabled id="" style="background: #142f61; font-size: 16px">
+                            <button class="offset-3 col-6 btn btn-sm fw-bold text-white rounded-pill " disabled id="" style="background: #142f61; font-size: 16px">
                                 Hire Now
                             </button>
-                           
+
                         <?php
                         } else {
                         ?>
@@ -141,7 +142,7 @@ include 'header.php';
 
                     </div>
                     <div class="row pb-4">
-                        <div id="scheduleNow" class=" offset-3 col-6 btn btn-sm fw-bold text-white rounded-pill " style="background: #142f61; font-size: 16px">
+                        <div id="scheduleNow" data-bs-toggle="modal" data-bs-target="#schedulehim_modal<?php echo $customerID;  ?>" class=" offset-3 col-6 btn btn-sm fw-bold text-white rounded-pill " style="background: #142f61; font-size: 16px">
                             Schedule Now
                         </div>
                     </div>
@@ -403,7 +404,7 @@ include 'header.php';
         <div class="modal-dialog modal-dialog-centered" id="modalBoxWidth">
             <!-- Modal content-->
             <div class="modal-content  mx-3">
-                <form action="" method="POST" id="hirespecificForm">
+                <form action="" method="POST" id="hireNowForm">
                     <div class="modal-header text-white py-1 m-0" id="modalTitle" style="background-color: #142f61;">
                         <h5 class="modal-title" id="address-label-title">Register Details</h5>
                         <button type="button" class="btn-close bg-white text-white fw-bold" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -418,7 +419,7 @@ include 'header.php';
                             <fieldset id="group1">
                                 <?php
                                 $query_service_list = "SELECT * FROM service_of_tradesman  WHERE tradesman_id='$customerID'";
-                                $service_result =QueryHandler::query($query_service_list);
+                                $service_result = QueryHandler::query($query_service_list);
 
                                 if (mysqli_num_rows($service_result) > 0) {
                                     while ($row = mysqli_fetch_assoc($service_result)) {
@@ -515,19 +516,41 @@ include 'header.php';
             </div>
         </div>
     </div>
-    
-    <div class="modal fade " id="hirehim_modal<?php echo $customer_id; ?>">
+
+    <div class="modal fade" id="schedulehim_modal<?php echo $customerID;  ?>">
         <div class="modal-dialog modal-dialog-centered" id="modalBoxWidth">
             <div class="modal-content  mx-3">
-                <form action="" method="POST" id="comment_form">
-                    <div class="modal-header text-white py-1 m-0" id="modalTitle">
+                <form action="" method="POST" id="scheduleNowForm">
+                    <div class="modal-header text-white py-1 m-0" id="modalTitle" style="background-color: #142f61;">
                         <h5 class="modal-title">Register Details</h5>
                         <button type="button" class="btn-close bg-white text-white fw-bold" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div>
-                            <input type="hidden" class="form-control" id="sender_id" name="sender_id" value="<?php echo $customer_id_no; ?>">
-                            <input type="hidden" class="form-control" id="receiver_id" name="receiver_id" value="<?php echo $customerID; ?>">
+                        <input type="hidden" class="form-control" id="sender_id" name="sender_id" value="<?php echo $customer_id_no; ?>">
+                        <input type="hidden" class="form-control" id="receiver_id" name="receiver_id" value="<?php echo $customerID; ?>">
                     </div>
+                    <div class="row mx-2 fw-bold">
+                        <div class="fw-bold h5" id="selectService">
+                            Select Service
+                        </div>
+                        <fieldset id="group1">
+                            <?php
+                            $query_service_list = "SELECT * FROM service_of_tradesman  WHERE tradesman_id='$customerID'";
+                            $service_result = QueryHandler::query($query_service_list);
+
+                            if (mysqli_num_rows($service_result) > 0) {
+                                while ($row = mysqli_fetch_assoc($service_result)) {
+                            ?>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" id="serviceRadio" name="radio" value="<?php echo $row['service_id'] ?>"><?php echo $row['service_name'] ?>
+                                    </div>
+                            <?php
+                                }
+                            }
+                            ?>
+                        </fieldset>
+                    </div>
+
                     <div class="row fw-bold mx-2">
                         <div class="col-12 col-md-6">
                             <div class="fw-bold h5" id="dateAndTime">
@@ -573,13 +596,7 @@ include 'header.php';
                         <div id="fixed_map"></div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-12 modal_body_map">
-                            <div class="location-map" id="location-map">
-                                <div style="width: 100%; height: 300px;" id="map"></div>
-                            </div>
-                        </div>
-                    </div>
+   
 
                     <div class=" d-flex flex-row-reverse mx-3">
                         <div class="">
@@ -613,34 +630,34 @@ include 'header.php';
     </div>
 
     <script>
-        initMap(9.6615,  80.0255);
+        // initMap(9.6615,  80.0255);
         $(document).ready(function() {
             console.log("laksi");
 
-            $('#comment_form').on('submit', function(event) {
-                    let customer_id = $('#hirehimfinal<?php echo $customer_id; ?>').attr("data-id");
-                    event.preventDefault();
+            $('#scheduleNowForm').on('submit', function(event) {
+                let customer_id = $('#hirehimfinal<?php echo $customer_id; ?>').attr("data-id");
+                event.preventDefault();
+                var form_data = $(this).serialize();
+                if ($('#date').val() != '' && $('#time').val() != '') {
                     var form_data = $(this).serialize();
-                    if ($('#date').val() != '' && $('#time').val() != '') {
-                        var form_data = $(this).serialize();
-                        $.ajax({
-                            url: "insert.php",
-                            method: "POST",
-                            data: form_data,
-                            success: function(data) {
-                                $('#comment_form')[0].reset();
-                                load_unseen_notification();
-                            }
-                        });
-                    } else {
-                        alert("Both Fields are Required");
-                        console.log("Aler msg = #date");
-                    }
-                });
+                    $.ajax({
+                        url: "insertSchedule.php",
+                        method: "POST",
+                        data: form_data,
+                        success: function(data) {
+                            $('#scheduleNowForm')[0].reset();
+                            load_unseen_notification();
+                        }
+                    });
+                } else {
+                    alert("Both Fields are Required");
+                    console.log("Aler msg = #date");
+                }
+            });
 
             $("#scheduleNow").click(function() {
-                console.log("hirehim clicked");
-                $("#hirehim_modal<?php echo $customer_id; ?>").modal({
+                console.log("schedulehim clicked");
+                $("#schedulehim_modal<?php echo $customer_id; ?>").modal({
                     show: true
                 });
             });
@@ -663,7 +680,7 @@ include 'header.php';
                 getCount();
             }, 5000);
 
-            $('#hirespecificForm').on('submit', function(event) {
+            $('#hireNowForm').on('submit', function(event) {
                 var form_data = $(this).serialize();
                 console.log(form_data);
                 let tradesman_id = <?php echo $customerID; ?>;
@@ -674,12 +691,12 @@ include 'header.php';
                 console.log(receiver_id);
                 if ($('#receiver_id').val() != '') {
                     $.ajax({
-                        url: "insert.php",
+                        url: "insertHirenow.php",
                         method: "POST",
                         data: form_data,
                         success: function(data) {
                             console.log("hire specific form success");
-                            $('#hirespecificForm')[0].reset();
+                            $('#hireNowForm')[0].reset();
                             $('id2').html(data);
                         }
                     });
@@ -688,6 +705,7 @@ include 'header.php';
 
             function getCount(view = '') {
                 let customer_id = <?php echo $customer_id_no ?>;
+                console.log("get count start");
                 $.ajax({
 
                     url: "countSchedule.php",
@@ -698,6 +716,8 @@ include 'header.php';
                     dataType: "json",
                     success: function(data) {
                         // $('#msgFromSchedulePage').html(data);
+                        console.log("get count success");
+                        console.log(data);
 
                         if (data.unseen_notification > 0) {
                             $('.count').html(data.unseen_notification);
@@ -726,6 +746,7 @@ include 'header.php';
 
             function load_unseen_notification(view = '') {
                 let tradesman_id = <?php echo $customer_id_no ?>;
+                console.log("load unseen start");
                 console.log(tradesman_id);
                 $.ajax({
                     url: "fetchOK.php",
@@ -738,6 +759,7 @@ include 'header.php';
                     success: function(data) {
                         // $('#msgFromSchedulePage').html(data);
                         $('.dropdown-menu').html(data.notification);
+                        console.log(data.notification);
                         getCount();
                     }
                 });
@@ -795,10 +817,9 @@ include 'header.php';
         });
     </script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
-        <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
-    <script
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB2psniVzC9cwc5r1b6xt3ggfhFUt0DvsA&callback=initMap"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB2psniVzC9cwc5r1b6xt3ggfhFUt0DvsA&callback=initMap"></script>
 
 
 </body>
