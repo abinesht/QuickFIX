@@ -10,7 +10,7 @@ if (isset($_POST['service_name'])) {
     $service_name = $_POST['service_name'];
     $provider_name = $_POST['provider_name'];
     //$cover_photo = $_POST['cover_photo'];
-    $add_item_query = "INSERT INTO `service` (`service_name`, `provider_name`) VALUES ('$service_name','$provider_name')";
+    $add_item_query = "INSERT INTO `service` (`service_name`, `provider_name` , cover_photo) VALUES ('$service_name','$provider_name' ,'carpenter.jpg')";
     QueryHandler::query( $add_item_query);
 echo $service_name;
 echo $provider_name;

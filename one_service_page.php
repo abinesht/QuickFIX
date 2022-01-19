@@ -1,6 +1,6 @@
 <?php
 include "header.php";
-$service_id = $_GET['service_id']; 
+$service_id = $_GET['service_id'];
 
 $sql = "SELECT * FROM service WHERE service_id = '$service_id'";
 $result_service = QueryHandler::query($sql);
@@ -47,7 +47,6 @@ if (isset($_SESSION["customer_id"])) {
 if (isset($_SESSION['tradesman_id_for_hire_now'])) {
     $tradesman_id_hire_Now = $_SESSION['tradesman_id_for_hire_now'];
     echo "<script>console.log($tradesman_id_hire_Now)</script>";
-
 }
 ?>
 
@@ -233,7 +232,7 @@ if (isset($_SESSION['tradesman_id_for_hire_now'])) {
 
 
         @media (max-width: 1400px) {
-            
+
 
             .oneService .relatedPeople .button {
                 min-width: 135px;
@@ -284,7 +283,7 @@ if (isset($_SESSION['tradesman_id_for_hire_now'])) {
 
 
         @media (max-width: 768px) {
-            
+
 
             .oneService .aboutService .button {
                 max-width: 220px;
@@ -299,7 +298,7 @@ if (isset($_SESSION['tradesman_id_for_hire_now'])) {
         }
 
         @media (max-width: 576px) {
-            
+
 
             .oneService .aboutService .button {
                 max-width: 180px;
@@ -314,7 +313,7 @@ if (isset($_SESSION['tradesman_id_for_hire_now'])) {
         }
 
         @media (max-width: 476px) {
-            
+
 
             .oneService .aboutService .button {
                 max-width: 140px;
@@ -329,7 +328,7 @@ if (isset($_SESSION['tradesman_id_for_hire_now'])) {
         }
 
         @media (max-width: 416px) {
-            
+
 
             .oneService .aboutService .button {
                 max-width: 120px;
@@ -362,7 +361,7 @@ if (isset($_SESSION['tradesman_id_for_hire_now'])) {
             margin-bottom: 10px;
         }
 
-         #modalTitle {
+        #modalTitle {
             background-color: #142f61;
             color: white;
         }
@@ -379,32 +378,13 @@ if (isset($_SESSION['tradesman_id_for_hire_now'])) {
 </head>
 
 <body>
+
     <script>
         function openNext_schedule() {
             $(document).ready(function() {
-                console.log('hiii ')
-                $("#hireschedule_modal<?php echo $customer_id ?>").modal({
-                    show: false
-                });
-                $("#hireschedule_modalNext<?php echo $customer_id ?>").modal({
-                    show: true
-                });
+                $("#hireschedule_modalNext<?php echo $customer_id ?>").modal("show");
             });
         };
-
-        // function openNext_schedule() {
-        //     console.log('hiii ')
-
-        //         $("#hireschedule_modalNext<?php echo $customer_id ?>").modal("show");
-
-        //     // $("#hireschedule_modal<?php echo $customer_id ?>").modal({
-        //     //     show: false
-        //     // });
-        //     // $("#hireschedule_modalNext<?php echo $customer_id ?>").modal({
-        //     //     show: true
-        //     // });
-
-        // };
     </script>
 
 
@@ -551,10 +531,10 @@ if (isset($_SESSION['tradesman_id_for_hire_now'])) {
                                     </div>
                                 </div>
 
-                                <div class="col-4" >
+                                <div class="col-4">
                                     <div class="row  p-0" style="margin-top: -10px;">
                                         <div class="col-3  p-0 pt-1" style="font-size: 10px;"><?php echo round($star_5 * 100 / $star_total) ?>%</div>
-                                        <div class="col-9 five_stars p-0 " >
+                                        <div class="col-9 five_stars p-0 ">
                                             <span class="material-icons">star_rate</span>
                                             <span class="material-icons">star_rate</span>
                                             <span class="material-icons">star_rate</span>
@@ -564,7 +544,7 @@ if (isset($_SESSION['tradesman_id_for_hire_now'])) {
                                     </div>
                                     <div class="row p-0" style="margin-top: -9px;">
                                         <div class="col-3 p-0 pt-1" style="font-size: 10px;"><?php echo round($star_4 * 100 / $star_total) ?>%</div>
-                                        <div class="col-9 five_stars p-0 " >
+                                        <div class="col-9 five_stars p-0 ">
                                             <span class="material-icons">star_rate</span>
                                             <span class="material-icons">star_rate</span>
                                             <span class="material-icons">star_rate</span>
@@ -574,7 +554,7 @@ if (isset($_SESSION['tradesman_id_for_hire_now'])) {
                                     </div>
                                     <div class="row  p-0" style="margin-top: -9px;">
                                         <div class="col-3  p-0 pt-1" style="font-size: 10px;"><?php echo round($star_3 * 100 / $star_total) ?>%</div>
-                                        <div class="col-9 five_stars p-0 " >
+                                        <div class="col-9 five_stars p-0 ">
                                             <span class="material-icons">star_rate</span>
                                             <span class="material-icons">star_rate</span>
                                             <span class="material-icons">star_rate</span>
@@ -584,7 +564,7 @@ if (isset($_SESSION['tradesman_id_for_hire_now'])) {
                                     </div>
                                     <div class="row  p-0" style="margin-top: -9px;">
                                         <div class="col-3  p-0 pt-1" style="font-size: 10px;"><?php echo round($star_2 * 100 / $star_total) ?>%</div>
-                                        <div class="col-9 five_stars p-0 " >
+                                        <div class="col-9 five_stars p-0 ">
                                             <span class="material-icons">star_rate</span>
                                             <span class="material-icons">star_rate</span>
                                             <span class="material-icons">star_border</span>
@@ -594,7 +574,7 @@ if (isset($_SESSION['tradesman_id_for_hire_now'])) {
                                     </div>
                                     <div class="row  p-0" style="margin-top: -9px;">
                                         <div class="col-3  p-0 pt-1" style="font-size: 10px;"><?php echo round($star_1 * 100 / $star_total) ?>%</div>
-                                        <div class="col-9 five_stars p-0 " >
+                                        <div class="col-9 five_stars p-0 ">
                                             <span class="material-icons">star_rate</span>
                                             <span class="material-icons">star_border</span>
                                             <span class="material-icons">star_border</span>
@@ -658,11 +638,11 @@ if (isset($_SESSION['tradesman_id_for_hire_now'])) {
                             <div class="col">
                                 <div class="row">
                                     <div class="col">
-                                        <button class=" button hire_one_tradesman fw-bold" type="button">Hire Now </button>
+                                    <a href="user_merge.php?tradesman_id=<?php echo $tradesman_id; ?>"> <button class=" button hire_one_tradesman fw-bold" type="button">Hire Now </button> </a>
 
                                     </div>
                                     <div class="col">
-                                        <button class="button schedule_one_tradesman fw-bold" type="button" data-bs-toggle="modal" data-bs-target="#modal_schedule_one_tradesman">Schedule Now </button>
+                                       <a href="user_merge.php?tradesman_id=<?php echo $tradesman_id; ?>">  <button class="button schedule_one_tradesman fw-bold" type="button" data-bs-toggle="modal" data-bs-target="#modal_schedule_one_tradesman">Schedule Now </button> </a>
 
                                     </div>
                                 </div>
@@ -731,8 +711,8 @@ if (isset($_SESSION['tradesman_id_for_hire_now'])) {
 
                     <div class=" d-flex flex-row-reverse mx-3 my-1">
                         <div class="">
-                       
-                        <button id="hirehimfinal<?php echo $customer_id; ?>" data-id=" <?php echo $customer_id;?>" class="close btn text-white fw-bold mt-1" type="submit" name="submit" style="background-color:#142f61">
+
+                            <button id="hirehimfinal<?php echo $customer_id; ?>" data-id=" <?php echo $customer_id; ?>" class="close btn text-white fw-bold mt-1" type="submit" name="submit" style="background-color:#142f61">
                                 <!-- <input type="submit" name="post" id="post" class="btn btn-info" value="Post" /> -->
                                 Hire Now
                             </button>
@@ -750,10 +730,9 @@ if (isset($_SESSION['tradesman_id_for_hire_now'])) {
         </div>
     </div>
 
-
     <!-- Schdule Any Tradesman Modal box 1 -->
 
-    <div class="modal fade " id="hireschedule_modal<?php echo $customer_id ?>" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+    <div class="modal fade summa_modal" id="hireschedule_modal<?php echo $customer_id ?>" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered" id="modalBoxWidth">
             <div class="modal-content  mx-3">
                 <form action="" method="POST" id="comment_form<?php echo $customer_id; ?>">
@@ -811,9 +790,9 @@ if (isset($_SESSION['tradesman_id_for_hire_now'])) {
 
                     <div class=" d-flex flex-row-reverse mx-3">
                         <div class="my-2">
-                            <button class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" data-bs-dismiss="modal">Open second modal</button>
+                            <!-- <button class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" data-bs-dismiss="modal">Open second modal</button> -->
 
-                            <button id="scheduleAnybtn" data-id=" <?php echo $customer_id; ?>" data-bs-target="#scheduleAny_dummy" data-bs-toggle="modal" data-bs-dismiss="modal" class="close btn text-white fw-bold mt-1" name="scheduleNex" style="background-color:#142f61">
+                            <button type="submit" id="scheduleAnybtn" data-id=" <?php echo $customer_id; ?>" data-bs-toggle="modal" data-bs-dismiss="modal" class="close btn text-white fw-bold mt-1" name="scheduleNext" style="background-color:#142f61">
                                 <!-- <input type="submit" name="post" id="post" class="btn btn-info" value="Post" /> -->
                                 Hire Schedule
                             </button>
@@ -826,7 +805,7 @@ if (isset($_SESSION['tradesman_id_for_hire_now'])) {
 
                 if (isset($_POST['scheduleNext'])) {
 
-                    echo "<script> alert('dsgas') </script>";
+                    // echo "<script> alert('dsgas') </script>";
                     if ($_POST['schedule_Address_radio'] == "Use default Address") {
                         $result =  QueryHandler::query("SELECT * from customer WHERE customer_id='$customer_id'");
                         $data = mysqli_fetch_assoc($result);
@@ -857,8 +836,6 @@ if (isset($_SESSION['tradesman_id_for_hire_now'])) {
     </div>
 
 
-
-
     <div class="modal fade " id="scheduleAny_dummy">
         <div class="modal-dialog modal-dialog-centered" id="modalBoxWidth">
             <!-- Modal content-->
@@ -870,10 +847,10 @@ if (isset($_SESSION['tradesman_id_for_hire_now'])) {
 
     <!-- Schedule Any Tradesman Modal Box 2 -->
 
-    <div class="modal fade " id="hireschedule_modalNext<?php echo $customer_id ?>">
+    <div class="modal fade summamodal2" id="hireschedule_modalNext<?php echo $customer_id ?>">
         <div class="modal-dialog modal-dialog-centered" id="modalBoxWidth">
             <div class="modal-content  mx-3">
-                <form action="" method="POST" id="comment_form<?php echo $customer_id; ?>">
+                <form action="" method="POST" id="scheduleAnyForm">
                     <div>
                         <!-- <input type="text" class="form-control" id="sender_id" name="sender_id" value="<?php echo $customer_id; ?>">
                         <input type="text" class="form-control" id="receiver_id" name="receiver_id" value="<?php echo $tradesman_id; ?>">
@@ -889,7 +866,6 @@ if (isset($_SESSION['tradesman_id_for_hire_now'])) {
 
                         $js = json_encode($distanceArr);
                         echo "<script>console.log($js)</script>";
-                        echo "<script>console.log($distanceArr[1])</script>";
                     }
 
                     $suggest_count = 0;
@@ -921,7 +897,18 @@ if (isset($_SESSION['tradesman_id_for_hire_now'])) {
                                             <?php echo $distance ?>km away
                                         </div>
                                         <div class="col-8  text-center fw-bold">
-                                            <button id="hirehimfinal<?php echo $tradesman_id; ?>" data-id=" <?php echo $tradesman_id; ?>" class=" btn text-white fw-bold mt-1 rounded" type="submit" name="schedule_last" style="background-color:#142f61">
+
+                                        
+                    <textarea class=" form-control" name="address" id="address-label-HireAny" hidden value="<?php echo $_SESSION['address'];?>"></textarea>
+                    <input class="col-6" type="text" name="lng" id="lngHireAny" value="" hidden value="<?php echo $_SESSION['lat'];?>">
+                    <input class="col-6" type="text" name="lat" id="latHireAny" value="" hidden value="<?php echo $_SESSION['lng'];?>">
+                                            <input type="hidden" class="form-control" id="sender_id" name="sender_id" value="<?php echo $customer_id; ?>">
+                                            <input type="hidden" class="form-control" id="time" name="time" value="<?php echo $_SESSION['time']; ?>">
+                                            <input type="hidden" class="form-control" id="date" name="date" value="<?php echo $_SESSION['date']; ?>">
+                                            <input type="hidden" class="form-control" id="tradesman_id" name="tradesman_id" value="<?php echo $tradesman_id; ?>">
+                                            <input type="hidden" class="form-control" id="service_id" name="service_id" value="<?php echo $service_id; ?>">
+
+                                            <button id="hireschedule<?php echo $tradesmanid; ?>" data-id="" class=" btn text-white fw-bold mt-1 rounded" type="submit" name="schedule_last" style="background-color:#142f61">
                                                 <!-- <input type="submit" name="post" id="post" class="btn btn-info" value="Post" /> -->
                                                 Schedule
                                             </button>
@@ -942,16 +929,18 @@ if (isset($_SESSION['tradesman_id_for_hire_now'])) {
         </div>
     </div>
 
-
     <script>
         $(document).ready(function() {
             initMaphireAny()
             initMapScheduleAny()
             console.log("doc ready");
+
+            // scheduleAnyForm
+
             $('#hireanyform').on('submit', function(event) {
-                
+
                 let customer_id = $('#hirehimfinal<?php echo $customer_id; ?>').attr("data-id");
-                console.log( customer_id);
+                console.log(customer_id);
                 // alert(customer_id);
                 event.preventDefault();
                 var form_data = $(this).serialize();
@@ -974,6 +963,32 @@ if (isset($_SESSION['tradesman_id_for_hire_now'])) {
                     console.log("Aler msg = #date");
                 }
             });
+
+            $('#scheduleAnyForm').on('submit', function(event) {
+
+                event.preventDefault();
+                var form_data = $(this).serialize();
+                console.log("schedule any start");
+                console.log(form_data);
+                if ($('#date').val() != '' && $('#time').val() != '') {
+                    var form_data = $(this).serialize();
+                    $.ajax({
+                        url: "insertScheduleAny.php",
+                        method: "POST",
+                        data: form_data,
+                        success: function(data) {
+                            $('#scheduleAnyForm')[0].reset();
+                            // load_unseen_notification();
+                            console.log("schedule any form success");
+                            console.log(data);
+                        }
+                    });
+                } else {
+                    alert("Both Fields are Required");
+                    console.log("Aler msg = #date");
+                }
+            });
+
 
         });
     </script>

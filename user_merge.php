@@ -170,7 +170,7 @@ include 'header.php';
                     $data = mysqli_fetch_assoc($result);
                     ${'star_' . $i} = $data['star'];
                 }
-                $star_total = $star_1 + $star_2 + $star_3 + $star_4 + $star_5;
+                $star_total = $star_1 + $star_2 + $star_3 + $star_4 + $star_5+1;
 
                 ?>
                 <div class="card rounded-3 shadow-lg m-3 p-2 px-3">

@@ -115,7 +115,7 @@ function hidefor($userType, $user)
                         <li class="dropdown">
                             <!-- <a href="#" id="drop-down" class="dropdown-toggle " data-toggle="dropdown"> -->
                             <!-- </a> -->
-                            <ul class="searchmenu-item  m-0 p-0" style="list-style-type: none;"></ul>
+                            <ul class="searchmenu-item text-white  m-0 p-1" style="list-style-type: none; background-color: #142F61;  font-weight: bold;"></ul>
                         </li>
                     </ul>
 
