@@ -48,8 +48,7 @@ include 'header.php';
     $customerID = $_GET['tradesman_id']; // tradesman ID    JB
     $customer_id_no = $_SESSION['customer_id']; // customer ID    
     // $customer_id_no = 18; // customer ID    
-    $tradesmanObj = new Tradesman();
-    $tradesmanObj->read($customerID);
+    $tradesmanObj = Tradesman::getInstance($customerID);
     ?>
     <div class="container-lg">
         <div class="row pt-4">
@@ -60,7 +59,7 @@ include 'header.php';
                 <div class="card rounded-3 shadow-lg mx-3">
                     <div class="row d-flex align-items-center py-4 ps-5">
                         <div class="col-5">
-                            <img src="images/<?php echo $tradesmanObj->getImg() ?>" class="rounded-circle" style="width: 90px" alt="profile photo" />
+                            <img src="<?php echo $tradesmanObj->getImg() ?>" class="rounded-circle" style="width: 90px" alt="profile photo" />
                         </div>
                         <div class="col-7">
                             <div class="row">
@@ -170,7 +169,7 @@ include 'header.php';
                     $data = mysqli_fetch_assoc($result);
                     ${'star_' . $i} = $data['star'];
                 }
-                $star_total = $star_1 + $star_2 + $star_3 + $star_4 + $star_5+1;
+                $star_total = $star_1 + $star_2 + $star_3 + $star_4 + $star_5;
 
                 ?>
                 <div class="card rounded-3 shadow-lg m-3 p-2 px-3">
@@ -348,7 +347,7 @@ include 'header.php';
                                                 <div class="col-4 col-sm-3 col-md-4  col-xl-4 col-xxl-3 ">
                                                     <div class="row">
                                                         <div class="col-12 col-lg-4 col-xl-3 text-center ">
-                                                            <img src="images/<?php echo $row2['img'] ?>" class="rounded-circle" style="width: 50px" alt="profile photo" />
+                                                            <img src="<?php echo $row2['img'] ?>" class="rounded-circle" style="width: 50px" alt="profile photo" />
                                                         </div>
                                                         <div class="col-12  col-lg-8 col-xl-9 text-center ">
                                                             <div class=" pt-1"><?php echo $row2['firstname'] ?></div>

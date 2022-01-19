@@ -41,8 +41,7 @@ if (isset($_POST["lat"])) {
     $service->read($sender_id);
     $service_name = $service->getService_name();
 
-    $customer = new Customer();
-    $customer->read($sender_id);
+    $customer = Customer::getInstance($sender_id);
     $name_customer = $customer->getUsername();
 
     $notificationString = "Hire Now request <br> Service - : <strong>".$service_name." </strong><br> Customer : <strong>".$name_customer."</strong>";

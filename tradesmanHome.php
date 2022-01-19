@@ -1,12 +1,8 @@
 <?php
 include 'header.php';
 include 'calendar.php';
-// $tradesman_id = 17;
-$tradesman_id = $_SESSION['customer_id'];
-// $tradesman_id = $_GET['tradesman_id'];
+$tradesman_id =  $user->getTradesman_id();
 
-$tradesmanObj = new Tradesman();
-$tradesmanObj->read($tradesman_id);
 ?>
 
 <html>
@@ -240,29 +236,29 @@ $tradesmanObj->read($tradesman_id);
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-3" id="photo">
                         <div class="text-center">
-                            <img src=<?php $tradesmanObj->getImg() ?> id="workerPhoto" class="" />
+                            <img src=<?php echo $user->getImg(); ?> id="workerPhoto" class="" />
                         </div>
-                        <div class="text-center pt-3">@<?= $tradesmanObj->getUsername() ?></div>
+                        <div class="text-center pt-3">@<?= $user->getUsername() ?></div>
                     </div>
                     <div class="col-sm-12 col-md-12 col-lg-8 ms-lg-4 ms-md-4 ms-lg-0" id="details">
                         <div class="row" id="name">
-                            <div class="text-uppercase"><?= $tradesmanObj->getFirstname(); ?> <?= $tradesmanObj->getLastname() ?></div>
+                            <div class="text-uppercase"><?= $user->getFirstname(); ?> <?= $user->getLastname() ?></div>
                         </div>
                         <div class="row pt-3" id="number">
-                            <div><?= $tradesmanObj->getPhone_no() ?></div>
-                            <div><?= $tradesmanObj->getEmail() ?></div>
-                            <div><?= $tradesmanObj->getAddress() ?></div>
+                            <div><?= $user->getPhone_no() ?></div>
+                            <div><?= $user->getEmail() ?></div>
+                            <div><?= $user->getAddress() ?></div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-5 com-sm-12 ms-4 row mt-sm-3" id="earnings">
                 <div id="counts" class="col-md-12 col-sm-6">
-                    <div>Total Hirings - <?= $tradesmanObj->getNum_of_hirings() ?></div>
-                    <div>Total Ratings - <?= $tradesmanObj->getNum_of_ratings() ?></div>
-                    <div>Total Reviews - <?= $tradesmanObj->getNum_of_review() ?></div>
-                    <div>Average Rating - <?= $tradesmanObj->getAverage_rating() ?></div>
-                    <div>Total Earnings - <?= $tradesmanObj->getTotal_earnings() ?></div>
+                    <div>Total Hirings - <?= $user->getNum_of_hirings() ?></div>
+                    <div>Total Ratings - <?= $user->getNum_of_ratings() ?></div>
+                    <div>Total Reviews - <?= $user->getNum_of_review() ?></div>
+                    <div>Average Rating - <?= $user->getAverage_rating() ?></div>
+                    <div>Total Earnings - <?= $user->getTotal_earnings() ?></div>
                 </div>
                 <div id="eanrs" class="mt-3 col-md-12 col-sm-6">
                     <span id="earnsHeading" class="text-uppercase pb-1 pe-5">earnings
@@ -295,6 +291,7 @@ $tradesmanObj->read($tradesman_id);
                     </div>
                     <ul>
                         <?php
+                        
                         $sql = "SELECT * from calendar where tradesman_id='$tradesman_id' ORDER BY date;";
                         $result = QueryHandler::query($sql);
                         if (!$result) {
@@ -303,8 +300,7 @@ $tradesmanObj->read($tradesman_id);
                         $count = 0;
 
                         while ($row = mysqli_fetch_assoc($result)) {
-                            $customerObject = new Customer();
-                            $customerObject->read($row['customer_id']);
+                            $customerObject = Customer::getInstance($row['customer_id']);
                             // echo $row['customer_id'];
                             if (date('m', strtotime($row['date'])) == $current_month  && date('Y', strtotime($row['date'])) == $current_year) {
                                 $count = $count + 1;
@@ -371,8 +367,7 @@ $tradesmanObj->read($tradesman_id);
             $sql = "SELECT * FROM hiring WHERE current_status = 'completed' AND tradesman_id='$tradesman_id' limit 4;";
             $result = QueryHandler::query($sql);
             while ($row = mysqli_fetch_array($result)) {
-                $customerObject = new Customer();
-                $customerObject->read($row['customer_id']);
+                $customerObject = Customer::getInstance($row['customer_id']);
                 $hiringObject = new Hiring();
                 $hiringObject->read($row['hiring_id']);
             ?>
@@ -380,7 +375,7 @@ $tradesmanObj->read($tradesman_id);
                     <div id="hireBox" class="p-2 m-3 col-sm-12 col-lg-11">
                         <div class="row">
                             <div class="col-4  d-flex justify-content-center">
-                                <img src="images/mathi.JPG" id="photoWorker" />
+                                <img src=<?= $customerObject->getImg() ?> id="photoWorker" />
                             </div>
                             <div class="col-8" id="statics">
                                 <div>ID No &nbsp; &nbsp; :<span> <?= $customerObject->getCustomer_id() ?></span></div>
@@ -454,7 +449,7 @@ $tradesmanObj->read($tradesman_id);
                 <div id="box_service" class="col-md-5 mb-5">
                     <div id="box" class="row">
                         <div class="col text-center">
-                            <img id="job_images" class="" src="<?= $serviceObject->getCover_photo() ?>" alt="" />
+                            <img id="job_images" class="" src="Assets/Images/<?= $serviceObject->getCover_photo() ?>" alt="" />
                         </div>
                         <div id="service_detail " class=" col
                             pt-3
@@ -484,7 +479,7 @@ $tradesmanObj->read($tradesman_id);
 </body>
 
 </html>
-
+<?php include 'footer.php' ?>
 <script>
     $(document).ready(function() {
         // console.log('documemt ready');

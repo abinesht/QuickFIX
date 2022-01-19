@@ -83,25 +83,13 @@ if (isset($_POST["view"])) {
                         </li>
                         <li class="divider"></li>
               ';
-            } elseif ($row['notification_type'] == 'sheduleTimeCame') {
-                $notificationID = $row['notification_id'];
-                $hiring_id = $row['service_id'];
-                $output .= '
-                        <li>
-                            <div class="bg-light p-1 row" >
-                                <div class="col"><strong>' . $row["notification"] . '</strong> </div>
-                               <a href="on_going_hiring.php?hiring_id='.$hiring_id.'"> <div  class="btn btn-success " id="view" style="background-color:#142f61; color: white;"  data-id=" ' . $notificationID . '" > On Going Hiring </div> </a>
-                            </div>
-                        </li>
-                        <li class="divider"></li>
-              ';
             } else {
                 $notificationID = $row['notification_id'];
                 $output .= '
                         <li>
                                 <div class="bg-light p-1 row" >
                                     <div class="col"><strong>' . $row["notification"] . '</strong> </div>
-                                    <div  class="btn btn-success " id="done" style="background-color:#142f61; color: white;"  data-id="' . $notificationID . '" >done</div>
+                                    <a  class="btn btn-success " id="done" style="background-color:#142f61; color: white;"  data-id="' . $notificationID . '" >done</a>
                                 </div>
                         </li>
                         <li class="divider"></li>

@@ -38,8 +38,7 @@ include 'header.php';
     <?php
     $customerID = $_GET['id']; // tradesman ID    JB
    // $customer_id_no = 1; // customer ID    
-    $tradesmanObj = new Tradesman();
-    $tradesmanObj->read($_GET['id']);
+    $tradesmanObj = Tradesman::getInstance($_GET['id']);
     ?>
    
     <div class="container-lg">

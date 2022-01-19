@@ -1,8 +1,14 @@
 <?php
 require ("./classes.php");
 session_start();
+//session_unset();
 if (array_key_exists('customer_id',$_SESSION)) {
-    header("Location: tradesmanHome.php");
+    if($_SESSION["is_worker"]==1){
+        header("Location: tradesmanHome.php?Home=");
+    }
+    else{
+        header("Location: customerHome.php?Home=");
+    }
 }
 $error = "";
 $success = "";
@@ -26,13 +32,19 @@ if (array_key_exists("login", $_POST)) {
             }
         }
 
-        else if ($result = QueryHandler::query("SELECT `password`,`customer_id` FROM `customer` WHERE username = '".$_POST["username"]."' LIMIT 1")) {
+        else if ($result = QueryHandler::query("SELECT `password`,`customer_id`,`is_worker` FROM `customer` WHERE username = '".$_POST["username"]."' LIMIT 1")) {
             if ($result -> num_rows == 1) {
                 $row = $result->fetch_assoc();
                 if($_POST["password"] == Password::decrypt($row["password"])){
                     $_SESSION["customer_id"]=$row["customer_id"];
                     $_SESSION["login"]=1;
-                    header("Location: tradesmanHome.php");
+                    $_SESSION["is_worker"]=$row["is_worker"];
+                    if($row["is_worker"]==1){
+                       header("Location: tradesmanHome.php?Home=");
+                    }
+                    else{
+                        header("Location: customerHome.php?Home=");
+                    }
                 } 
                 else{
                     $error = "Password wasn't matched";
