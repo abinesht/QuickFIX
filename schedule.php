@@ -27,7 +27,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     $lng = $row['longitude'];
     $lat = $row['latitude'];
     // $notification->createHiring($sheduleID);
-    $hiring_id = $notification->createHiring($date,$time, $tradesman_id,$customer_id,$service_id, "ongoing" , $lng , $lat , "On the way");
+    $hiring_id = $notification->createHiring($date,$time, $tradesman_id,$customer_id,$service_id, "On going" , $lng , $lat , "On the way");
 
 
 
