@@ -264,7 +264,7 @@ include '../classes.php';
                     </button>
                 </div>
 
-                <form id="serviceForm" action="s" method="POST" enctype="multipart/form-data">
+                <form id="serviceForm" action="" method="POST" enctype="multipart/form-data">
                     <div class="modal-body">
                         <div class="form-group row">
                             <label for="name" class="col-sm-4 col-form-label my-1">Service Name:</label>
@@ -283,7 +283,7 @@ include '../classes.php';
                         <div class="form-group row">
                             <label for="selectfile" class="col-sm-4 col-form-label my-1">Cover photo:</label>
                             <div class="col-sm-8">
-                                <input type="file" class="form-control" name="cover_photo" id="inputGroupFile02" style="border-color: #142f61; color: #142f61; " accept="image/*" required>
+                                <input type="file" class="form-control" name="cover_photo" id="inputGroupFile02" style="border-color: #142f61; color: #142f61; ">
                             </div>
                         </div>
 
@@ -298,7 +298,45 @@ include '../classes.php';
     </div>
 
     
+<?php
+ if (isset($_POST['add'])) {
+    $notification  = new Notification();
+    // $admin = new Admin();
+    $admin = Admin::getInstance();
+    $service_name = $_POST['service_name'];
+    $provider_name = $_POST['provider_name'];
+    //$cover_photo = $_POST['cover_photo'];
 
+
+    date_default_timezone_set("Asia/Colombo");
+    $item_added_date = date("Y-m-d h:i:sa");
+
+    if (!empty($_FILES['cover_photo'])) {
+
+        $check = getimagesize($_FILES["cover_photo"]["tmp_name"] ?? "");
+        if ($check !== false) {
+            $cover_photo = $_FILES['cover_photo']['name'];
+            $tmp_imageName = $_FILES['cover_photo']['tmp_name'];
+            $folder = 'Assets/Images/';
+            move_uploaded_file($tmp_imageName, $folder . $cover_photo);
+            $add_item_query = "INSERT INTO `service` (`service_name`, `provider_name`,`cover_photo`) VALUES ('$service_name','$provider_name','$cover_photo')";
+
+            QueryHandler::query( $add_item_query);
+
+            $getNewServiceId =  "SELECT * FROM service where service_name='$service_name' AND provider_name='$provider_name';";
+            $result_1 = QueryHandler::query($getNewServiceId);
+            $row = mysqli_fetch_assoc($result_1);
+            $newservice_id = $row['service_id'];
+            $admin->sendNotificationALL($service_name, $newservice_id);
+
+        } else {
+            $img_err = "File is not an image.";
+        }
+    } 
+    
+
+}
+?>
     
     <script type="text/javascript">
         if (window.history.replaceState) {
@@ -325,30 +363,11 @@ include '../classes.php';
         });
     </script>
 <script>
-        $(document).ready(function() {
-            $('#serviceForm').on('submit', function(event) {
-                var form_data = $(this).serialize();
-                console.log(form_data);
+      
+       
 
-                event.preventDefault();
-                var form_data = $(this).serialize();
 
-                // indexno   name
-                if ($('#name').val() != '' && $('#indexno').val() != '') {
-                    $.ajax({
-                        url: "service_insert.php",
-                        method: "POST",
-                        data: form_data,
-                        success: function(data) {
-                            $('#serviceForm')[0].reset();
-                            console.log(data);
-                            // $('id2').html(data);
-                        }
-                    });
-                }
-            });
-            
-        });
+
     </script>
 </body>
 

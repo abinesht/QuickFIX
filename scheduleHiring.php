@@ -34,7 +34,8 @@ $row = mysqli_fetch_assoc($result);
 
 $lng = $row['longitude'];
 $lat = $row['latitude'];
-    $hiring_id = $notification->createHiring($date,$time, $tradesman_id,$customer_id,$service_id, "scheduled" , $lng , $lat);
+    $hiring_id = $notification->createHiring($date,$time, $tradesman_id,$customer_id,$service_id, "Scheduled" , $lng , $lat, "On the way");
+
     // echo $sheduleID . '  ' . $date . '  ' . $time . '<br>';
     $canSchedule = $calendar->checkShedule($tradesman_id, $time, $date );
     // $tradesman_id = 1;

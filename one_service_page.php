@@ -670,7 +670,9 @@
 
                                     </div>
                                     <div class="col">
-                                        <button class=" button schedule_one_tradesman fw-bold" type="button">Schedule Now
+
+                                    <a href="user_merge.php?tradesman_id=<?php echo $tradesman_id; ?>">  <button class="button schedule_one_tradesman fw-bold" type="button" data-bs-toggle="modal" data-bs-target="#modal_schedule_one_tradesman">Schedule Now </button> </a>
+
 
                                     </div>
                                 </div>
@@ -850,6 +852,67 @@
                     </div>
                 </div>
                 
+
+
+                    <?php
+                    if (isset($_POST['scheduleNext'])) {
+
+                        $js = json_encode($distanceArr);
+                        echo "<script>console.log($js)</script>";
+                    }
+
+                    $suggest_count = 0;
+                    foreach ($distanceArr as $tradesmanid => $distance) {
+                        if ($suggest_count < 5) {
+                            $suggest_count++;
+                            $trademan_for_suggestion = new Tradesman();
+                            $trademan_for_suggestion->read($tradesmanid);
+                            $x = $trademan_for_suggestion->getFirstname();
+                            echo "<script>console.log($x)</script>";
+                    ?>
+
+                            <div class="d-flex pt-2  pb-3 text-secondary">
+                                <div class="col-5 ms-3 ">
+                                    <div class="row">
+                                        <div class="col-4 text-center ">
+                                            <img src="images/logo.png" class="rounded-circle" style="width: 50px; height:50px;" alt="profile photo" />
+                                        </div>
+                                        <div class="col-8" style="border-right: 0.2rem solid #142f61;">
+                                            <div class=" "><?php echo $trademan_for_suggestion->getFirstname(); ?></div>
+                                            <div class=""><?php echo $trademan_for_suggestion->getAverage_rating(); ?><span class="material-icons" style="color: orange; font-size: 18px; margin-left:5px; margin-top:3px;">star_rate</span></div>
+                                            <div class=" "><?php echo $trademan_for_suggestion->getTotal_hirings_count() ?> Total Hirings</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-7 ps-4 ms-1">
+                                    <div class="row">
+                                        <div class="col-4  ps-2 " style=" text-align: justify;">
+                                            <?php echo $distance ?>km away
+                                        </div>
+                                        <div class="col-8  text-center fw-bold">
+
+                                        
+                                            <input class=" form-control" name="address" id="address-label-HireAny" hidden value="<?php echo $_SESSION['address'];?>"></input>
+                                            <input class="col-6" type="text" name="lng" id="lngHireAny"  hidden value="<?php echo $_SESSION['lat'];?>">
+                                            <input class="col-6" type="text" name="lat" id="latHireAny" hidden value="<?php echo $_SESSION['lng'];?>">
+                                            <input type="hidden" class="form-control" id="sender_id" name="sender_id" value="<?php echo $customer_id; ?>">
+                                            <input type="hidden" class="form-control" id="time" name="time" value="<?php echo $_SESSION['time']; ?>">
+                                            <input type="hidden" class="form-control" id="date" name="date" value="<?php echo $_SESSION['date']; ?>">
+                                            <input type="hidden" class="form-control" id="tradesman_id" name="tradesman_id" value="<?php echo $tradesman_id; ?>">
+                                            <input type="hidden" class="form-control" id="service_id" name="service_id" value="<?php echo $service_id; ?>">
+
+                                            <button id="hireschedule<?php echo $tradesmanid; ?>" data-id="" class=" btn text-white fw-bold mt-1 rounded" type="submit" name="schedule_last" style="background-color:#142f61">
+                                                <!-- <input type="submit" name="post" id="post" class="btn btn-info" value="Post" /> -->
+                                                Schedule
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    <?php
+                        }
+                    }
+                    ?>
 
 
                 <div class=" d-flex flex-row-reverse mx-3">
