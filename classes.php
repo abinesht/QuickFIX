@@ -2165,13 +2165,12 @@ class Notification
             die('QUERY FAIL in notifiacation table!');
         }
     }
-    public function createHiring( $date, $time, $tradesman_id, $customer_id, $service_id,$final_status , $longitude , $latitude)
+    public function createHiring( $date, $time, $tradesman_id, $customer_id, $service_id,$final_status , $longitude , $latitude ,$current_status)
     {
        
-        echo "create hiring page";
-    echo $date.' '.$time.' '.$tradesman_id.' '.$customer_id.' '.$service_id;
-        $query = " INSERT INTO hiring( customer_id,tradesman_id, service_id,registered_dateTime,time,final_status , longitude , latitude)
-                             VALUES ( '$customer_id','$tradesman_id','$service_id','$date','$time','$final_status','$longitude' ,'$latitude');";
+    // echo $date.' '.$time.' '.$tradesman_id.' '.$customer_id.' '.$service_id;
+        $query = " INSERT INTO hiring( customer_id,tradesman_id, service_id,registered_dateTime,time,final_status , longitude , latitude , current_status)
+                             VALUES ( '$customer_id','$tradesman_id','$service_id','$date','$time','$final_status','$longitude' ,'$latitude' ,'$current_status');";
         $result_1= QueryHandler::query($query);
         if (!$result_1) {
             die('QUERY FAIL!');
@@ -2180,13 +2179,13 @@ class Notification
         $result_1 = QueryHandler::query($query_1);
         $row = mysqli_fetch_assoc($result_1);
         $hiring_id = $row['hiring_id'];
-        echo $hiring_id;
+        // echo $hiring_id;
         return $hiring_id;
     }
 
     public function getHiringIDOngoing($tradesman_id, $customer_id, $service_id,$date,$time)
     {
-        echo $tradesman_id.' '.$customer_id.' '.$service_id.' '.$time;
+        // echo $tradesman_id.' '.$customer_id.' '.$service_id.' '.$time;
         $query_1 = "SELECT hiring_id FROM hiring WHERE customer_id='$customer_id' AND tradesman_id='$tradesman_id' AND service_id= '$service_id' AND time='$time' ORDER BY hiring_id DESC LIMIT 1;";
         $result_1 = QueryHandler::query($query_1);
         if (!$result_1) {
