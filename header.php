@@ -115,7 +115,7 @@ function hidefor($userType, $user)
                         <li class="dropdown">
                             <!-- <a href="#" id="drop-down" class="dropdown-toggle " data-toggle="dropdown"> -->
                             <!-- </a> -->
-                            <ul class="searchmenu-item  m-0 p-0" style="list-style-type: none;"></ul>
+                            <ul class="searchmenu-item text-white  m-0 p-1" style="list-style-type: none; background-color: #142F61;  font-weight: bold;  position: relative;z-index: 2;"></ul>
                         </li>
                     </ul>
 
@@ -296,6 +296,25 @@ function hidefor($userType, $user)
                 getCount();
             }, 5000);
 
+            // getRecentSchedule(1);
+
+            function getRecentSchedule(tradesman_idd) {
+                console.log("get recent start");
+                console.log(tradesman_idd);
+                
+                $.ajax({
+                    url: "getRecentSchedule.php",
+                    method: "POST",
+                    data: {
+                        tradesman_id: tradesman_idd
+                    },
+                    success: function(data) {
+                        // $('#msgFromSchedulePage').html(data);
+                        console.log("get recent sucess.........");
+                        console.log(data);
+                    }
+                });
+            }
 
             function getCount(view = '') {
                 let customer_id = <?php echo $customer_id ?>;
@@ -322,24 +341,24 @@ function hidefor($userType, $user)
             // getCount();
 
             function insertNotification(type, sheduleID, view = '') {
-            console.log("insert notification start");
-            console.log(type,sheduleID);
-            $.ajax({
-                url: "insertC.php",
-                method: "POST",
-                data: {
-                    view: view,
-                    type: type,
-                    sheduleID: sheduleID
-                },
-                dataType: "json",
-                success: function(data) {
-                    load_unseen_notification('yes');
-                    console.log("insert notification success");
-                    console.log(data);
-                }
-            });
-        }
+                console.log("insert notification start");
+                console.log(type, sheduleID);
+                $.ajax({
+                    url: "insertC.php",
+                    method: "POST",
+                    data: {
+                        view: view,
+                        type: type,
+                        sheduleID: sheduleID
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                        load_unseen_notification('yes');
+                        console.log("insert notification success");
+                        console.log(data);
+                    }
+                });
+            }
 
             function load_unseen_notification(view = '') {
                 let tradesman_id = <?php echo $customer_id ?>;
@@ -387,7 +406,7 @@ function hidefor($userType, $user)
                         load_unseen_notification();
                         console.log(data);
                         hiring_id = data;
-                        // location.href = "http://localhost/quickfix/avines/ongoing/chatCustomer.php?hiring_id=" + hiring_id;
+                        location.href = "http://localhost/quickfix/final/QuickFIX/chatCustomer.php?hiring_id=" + hiring_id;
 
                     }
                 });
@@ -411,7 +430,7 @@ function hidefor($userType, $user)
                     }
                 });
             });
-          
+
             $(document).on("click", "#accept", function() {
 
                 $("#hirehim_modalFinal").modal({
@@ -432,7 +451,7 @@ function hidefor($userType, $user)
                         load_unseen_notification();
                         hiring_id = data;
                         console.log(data);
-                        // location.href = "http://localhost/quickfix/avines/ongoing/chatTradesman.php?hiring_id=" + hiring_id;
+                        location.href = "http://localhost/quickfix/final/QuickFIX/chatTradesman.php?hiring_id=" + hiring_id;
                     }
                 });
 
@@ -479,7 +498,7 @@ function hidefor($userType, $user)
                     success: function(data) {
                         console.log("schedule ID is : ");
                         load_unseen_notification();
-                       
+
 
                         console.log("decline clicked success....");
 

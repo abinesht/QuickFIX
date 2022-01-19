@@ -20,7 +20,6 @@ while ($row = mysqli_fetch_assoc($result)) {
 
     $date = $row['date'];
     $time = $row['time'];
-    echo  "hire now time is ". $time ;
     $tradesman_id = $row['receiver_id'];
     $customer_id = $row['sender_id'];
     // $service_id = $row[''];
@@ -28,7 +27,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     $lng = $row['longitude'];
     $lat = $row['latitude'];
     // $notification->createHiring($sheduleID);
-    $hiring_id = $notification->createHiring($date,$time, $tradesman_id,$customer_id,$service_id, "ongoing" , $lng , $lat);
+    $hiring_id = $notification->createHiring($date,$time, $tradesman_id,$customer_id,$service_id, "ongoing" , $lng , $lat , "On the way");
 
 
 
