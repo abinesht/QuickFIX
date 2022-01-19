@@ -150,33 +150,33 @@ include '../classes.php';
     $item_added_date;
     $img_err = "";
 
-    if (isset($_POST['add'])) {
+    // if (isset($_POST['add'])) {
         
-        $service_name = $_POST['service_name'];
-        $provider_name = $_POST['provider_name'];
-        //$cover_photo = $_POST['cover_photo'];
+    //     $service_name = $_POST['service_name'];
+    //     $provider_name = $_POST['provider_name'];
+    //     //$cover_photo = $_POST['cover_photo'];
 
 
-        date_default_timezone_set("Asia/Colombo");
-        $item_added_date = date("Y-m-d h:i:sa");
+    //     date_default_timezone_set("Asia/Colombo");
+    //     $item_added_date = date("Y-m-d h:i:sa");
 
-        if (!empty($_FILES['cover_photo'])) {
+    //     if (!empty($_FILES['cover_photo'])) {
 
-            $check = getimagesize($_FILES["cover_photo"]["tmp_name"] ?? "");
-            if ($check !== false) {
-                $cover_photo = $_FILES['cover_photo']['name'];
-                $tmp_imageName = $_FILES['cover_photo']['tmp_name'];
-                $folder = 'images/';
-                move_uploaded_file($tmp_imageName, $folder . $cover_photo);
-                $add_item_query = "INSERT INTO `service` (`service_name`, `provider_name`,`cover_photo`) VALUES ('$service_name','$provider_name','$cover_photo')";
+    //         $check = getimagesize($_FILES["cover_photo"]["tmp_name"] ?? "");
+    //         if ($check !== false) {
+    //             $cover_photo = $_FILES['cover_photo']['name'];
+    //             $tmp_imageName = $_FILES['cover_photo']['tmp_name'];
+    //             $folder = 'images/';
+    //             move_uploaded_file($tmp_imageName, $folder . $cover_photo);
+    //             $add_item_query = "INSERT INTO `service` (`service_name`, `provider_name`,`cover_photo`) VALUES ('$service_name','$provider_name','$cover_photo')";
 
-                QueryHandler::query($add_item_query);
-            } else {
-                $img_err = "File is not an image.";
-            }
-        } 
+    //             QueryHandler::query($add_item_query);
+    //         } else {
+    //             $img_err = "File is not an image.";
+    //         }
+    //     } 
         
-    }
+    // }
 
     
     ?>
@@ -264,19 +264,19 @@ include '../classes.php';
                     </button>
                 </div>
 
-                <form action="service.php" method="POST" enctype="multipart/form-data">
+                <form id="serviceForm" action="s" method="POST" enctype="multipart/form-data">
                     <div class="modal-body">
                         <div class="form-group row">
                             <label for="name" class="col-sm-4 col-form-label my-1">Service Name:</label>
                             <div class="col-sm-8">
-                                <input type="text" class="my-2 form-control inputstl" name="service_name" style="border-color: #142f61;" id="name" required />
+                                <input type="text" class="my-2 form-control inputstl" name="service_name" style="border-color: #142f61;" id="service_name" required />
                             </div>
                         </div>
 
                         <div class="form-group row my-3">
                             <label for="indexno" class="col-sm-4 col-form-label my-1">Provider Name:</label>
                             <div class="col-sm-8">
-                                <input type="text" class="my-2 form-control inputstl" name="provider_name" style="border-color: #142f61;" id="indexno" rows="2" required>
+                                <input type="text" class="my-2 form-control inputstl" name="provider_name" style="border-color: #142f61;" id="provider_name" rows="2" required>
                             </div>
                         </div>
 
@@ -290,7 +290,7 @@ include '../classes.php';
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn fw-bold " name="add" style="background-color: #142f61; color:#FFFFFF;">Add Item</button>
+                        <button id="add" type="submit" class="btn fw-bold " name="add" style="background-color: #142f61; color:#FFFFFF;">Add Item</button>
                     </div>
                 </form>
             </div>
@@ -324,7 +324,32 @@ include '../classes.php';
 
         });
     </script>
+<script>
+        $(document).ready(function() {
+            $('#serviceForm').on('submit', function(event) {
+                var form_data = $(this).serialize();
+                console.log(form_data);
 
+                event.preventDefault();
+                var form_data = $(this).serialize();
+
+                // indexno   name
+                if ($('#name').val() != '' && $('#indexno').val() != '') {
+                    $.ajax({
+                        url: "service_insert.php",
+                        method: "POST",
+                        data: form_data,
+                        success: function(data) {
+                            $('#serviceForm')[0].reset();
+                            console.log(data);
+                            // $('id2').html(data);
+                        }
+                    });
+                }
+            });
+            
+        });
+    </script>
 </body>
 
 </html>

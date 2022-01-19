@@ -38,33 +38,58 @@ if (isset($_POST["view"])) {
                         <li>
                                 <div class="bg-light p-1 row" >
                                     <div class="col"><strong>' . $row["notification"] . '</strong> </div>
-                                    <div class="btn btn-success " id="ok" style="background-color:#142f61; color: white;"  data-id=" ' . $notificationID . '" >OK</div>
+                                    <div class="btn btn-success " id="ok" style="background-color:#142f61; color: white;"  data-id="' . $notificationID . '" >OK</div>
                                 </div>
                         </li>
                         <li class="divider"></li>
                      ';
-            }
-            elseif($row['notification_type'] == 'accept_decline'){
+            } elseif ($row['notification_type'] == 'accept_decline') {
                 $commentID = $row['notification_id'];
                 $output .= '
               <li class="p-0">
                 <div class="" >
-                    <div class=" p-1"> '.$row["notification"].'<br /> Date : <strong>' . $row["date"] . '</strong><br /> Time : <small><em>' . $row["time"] . '</em></small></div>
+                    <div class=" p-1"> ' . $row["notification"] . '<br /> Date : <strong>' . $row["date"] . '</strong><br /> Time : <small><em>' . $row["time"] . '</em></small></div>
                     <div class="d-flex">
-                        <a  class="btn m-1" id="accept" style="background-color:#142f61; color: white;" data-id=" ' . $commentID . '" >Accept</a>
-                        <a class="btn m-1" id="decline" style="background-color:#142f61; color: white;" data-id=" ' . $commentID . '">Decline</a>
+                        <a  class="btn m-1" id="accept" style="background-color:#142f61; color: white;" data-id="' . $commentID . '" >Accept</a>
+                        <a class="btn m-1" id="decline" style="background-color:#142f61; color: white;" data-id="' . $commentID . '">Decline</a>
                     </div>
                 </div>
               </li>
               <li class="divider"></li>
               ';
-            }else{
+            } elseif ($row['notification_type'] == 'common') {
+                $commentID = $row['notification_id'];
+                $output .= '
+              <li class="p-0">
+                <div class="" >
+                    <div class=" p-1"> ' . $row["notification"] . '<br /> Date : <strong>' . $row["date"] . '</strong><br /> Time : <small><em>' . $row["time"] . '</em></small></div>
+                    <div class="d-flex">
+                        <a  class="btn m-1" id="schedule" style="background-color:#142f61; color: white;" data-id="' . $commentID . '" >Schedule</a>
+                        <a class="btn m-1" id="decline" style="background-color:#142f61; color: white;" data-id="' . $commentID . '">Decline</a>
+                    </div>
+                </div>
+              </li>
+              <li class="divider"></li>
+              ';
+            } elseif ($row['notification_type'] == 'addnewservice') {
+                $notificationID = $row['notification_id'];
+                $service_id = $row['service_id'];
+                $output .= '
+                        <li>
+                            <div class="bg-light p-1 row" >
+                                <div class="col"><strong>' . $row["notification"] . '</strong> </div>
+                               <a href="one_service_page.php?service_id='.$service_id.'"> <div  class="btn btn-success " id="view" style="background-color:#142f61; color: white;"  data-id=" ' . $notificationID . '" >view</div> </a>
+                            </div>
+                        </li>
+                        <li class="divider"></li>
+              ';
+            } else {
                 $notificationID = $row['notification_id'];
                 $output .= '
                         <li>
                                 <div class="bg-light p-1 row" >
                                     <div class="col"><strong>' . $row["notification"] . '</strong> </div>
-                                    <a  class="btn btn-success " id="done" style="background-color:#142f61; color: white;"  data-id=" ' . $notificationID . '" >done</a>
+                                    <a  class="btn btn-success " id="done" style="background-color:#142f61; color: white;"  data-id="' . $notificationID . '" >done</a>
                                 </div>
                         </li>
                         <li class="divider"></li>

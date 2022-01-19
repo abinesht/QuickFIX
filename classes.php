@@ -32,17 +32,17 @@ class Admin
         // $this->customers->detach($customerNewDetails);
     }
 
-    public function notify($service_name)
+    public function notify($service_name, $newservice_id)
     {
         foreach ($this->customers as $customer) {
-            $customer->AddNewServiceNotification($service_name,($customer->getCustomer_id()));
+            $customer->AddNewServiceNotification($service_name,($customer->getCustomer_id()), $newservice_id);
             // $customer->sendOffer($this);
         }
     }
 
-    public function sendNotificationALL($service_name)
+    public function sendNotificationALL($service_name , $newservice_id)
     {
-        $this->notify($service_name);
+        $this->notify($service_name, $newservice_id);
     }
 
     // public function addNewService($customer_id, $notificationString, $notificationType)
@@ -76,6 +76,16 @@ class Customer
     public function __construct(){
 
     }
+    
+    public function AddNewServiceNotification($service_name,$customer_id, $newservice_id)
+    {
+        // $conn = (new Connection())->createConnection();
+       
+        $notificationString= "Admin add new service : " . $service_name;
+        $query = " INSERT INTO notification(notification, receiver_id,sender_id ,notification_type, service_id ) VALUES ('$notificationString', '$customer_id',0 , 'addnewservice', '$newservice_id')";
+        QueryHandler::query($query);
+    }
+
     public static function getInstance($customer_id)
     {
         if (!array_key_exists($customer_id, self::$customers)) {
@@ -2127,23 +2137,23 @@ class Notification
         return $count;
     }
 
-    public function hireNow($notification, $receiver_id, $sender_id, $notification_type, $service_id)
+    public function hireNow($notification, $receiver_id, $sender_id, $notification_type, $service_id,$longitude , $latitude)
     {
-        $query = " INSERT INTO notification(notification, receiver_id,sender_id ,notification_type,service_id ) VALUES ('$notification', '$receiver_id','$sender_id' , '$notification_type','$service_id')";
+        $query = " INSERT INTO notification(notification, receiver_id,sender_id ,notification_type,service_id , longitude,latitude  ) VALUES ('$notification', '$receiver_id','$sender_id' , '$notification_type','$service_id', '$longitude' , '$latitude')";
         QueryHandler::query($query);
     }
 
 
-    public function create($notification, $receiver_id, $sender_id, $service_id)
+    public function create($notification, $receiver_id, $sender_id, $service_id,$notification_type,$time,$date,$longitude , $latitude)
     {
-        $query = " INSERT INTO notification(notification, receiver_id,sender_id, service_id) VALUES ('$notification', '$receiver_id','$sender_id','$service_id')";
+        $query = " INSERT INTO notification(notification, receiver_id,sender_id, service_id,notification_type,date,time, longitude,latitude) VALUES ('$notification', '$receiver_id','$sender_id','$service_id','$notification_type','$date','$time', '$longitude' , '$latitude')";
         QueryHandler::query($query);
     }
 
-    public function schedule($receiver_id, $sender_id, $date, $time, $notification, $service_id)
+    public function schedule($receiver_id, $sender_id, $date, $time, $notification, $service_id ,$longitude , $latitude)
     {
     
-        $query = " INSERT INTO notification( receiver_id,sender_id,date,time,notification,notification_type,service_id) VALUES ( '$receiver_id','$sender_id','$date' , '$time','$notification','common','$service_id')";
+        $query = " INSERT INTO notification( receiver_id,sender_id,date,time,notification,notification_type,service_id, longitude,latitude) VALUES ( '$receiver_id','$sender_id','$date' , '$time','$notification','common','$service_id', '$longitude' , '$latitude')";
         QueryHandler::query($query);
     }
 
@@ -2155,22 +2165,33 @@ class Notification
             die('QUERY FAIL in notifiacation table!');
         }
     }
-    public function createHiring($notification_id, $date, $time, $tradesman_id, $customer_id, $service_id)
+    public function createHiring( $date, $time, $tradesman_id, $customer_id, $service_id,$final_status , $longitude , $latitude)
     {
-        $query = " INSERT INTO hiring( customer_id,tradesman_id, service_id,date,time) VALUES ( '$customer_id','$tradesman_id','$service_id','$date','$time');";
-        QueryHandler::query($query);
-
+       
+        echo "create hiring page";
+    echo $date.' '.$time.' '.$tradesman_id.' '.$customer_id.' '.$service_id;
+        $query = " INSERT INTO hiring( customer_id,tradesman_id, service_id,registered_dateTime,time,final_status , longitude , latitude)
+                             VALUES ( '$customer_id','$tradesman_id','$service_id','$date','$time','$final_status','$longitude' ,'$latitude');";
+        $result_1= QueryHandler::query($query);
+        if (!$result_1) {
+            die('QUERY FAIL!');
+        }
         $query_1 = "SELECT hiring_id FROM hiring WHERE customer_id='$customer_id' AND tradesman_id='$tradesman_id' AND service_id= '$service_id' ORDER BY hiring_id DESC LIMIT 1;";
         $result_1 = QueryHandler::query($query_1);
         $row = mysqli_fetch_assoc($result_1);
         $hiring_id = $row['hiring_id'];
+        echo $hiring_id;
         return $hiring_id;
     }
 
     public function getHiringIDOngoing($tradesman_id, $customer_id, $service_id,$date,$time)
     {
-        $query_1 = "SELECT hiring_id FROM hiring WHERE customer_id='$customer_id' AND tradesman_id='$tradesman_id' AND service_id= '$service_id' AND date='$date' AND time='$time' ORDER BY hiring_id DESC LIMIT 1;";
+        echo $tradesman_id.' '.$customer_id.' '.$service_id.' '.$time;
+        $query_1 = "SELECT hiring_id FROM hiring WHERE customer_id='$customer_id' AND tradesman_id='$tradesman_id' AND service_id= '$service_id' AND time='$time' ORDER BY hiring_id DESC LIMIT 1;";
         $result_1 = QueryHandler::query($query_1);
+        if (!$result_1) {
+            die('QUERY FAIL in getHiringIDOngoing!');
+        }
         $row = mysqli_fetch_assoc($result_1);
         $hiring_id = $row['hiring_id'];
         return $hiring_id;
@@ -2236,6 +2257,3 @@ class Notification
         return $this->notification;
     }
 }
-
-
-?>

@@ -383,23 +383,6 @@ include 'header.php';
 
     </div>
 
-    <script>
-        // $(document).ready(function() {
-        //     $("#hire_now_button>").click(function() {
-        //         let service_id = $(this).attr("data-id");
-        //        location.href = "http://localhost/quickfix/avines/ongoing/chatCustomer.php?hiring_id=" + service_id;
-
-        //     });
-
-        //     $("#schedule_hiring_button").click(function() {
-        //         let service_id = $(this).attr("data-id");
-        //        location.href = "http://localhost/quickfix/avines/ongoing/chatCustomer.php?hiring_id=" + service_id;
-
-        //     });
-
-
-        // });
-    </script>
 
 </body>
 

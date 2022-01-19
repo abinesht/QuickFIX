@@ -100,7 +100,7 @@ class Calendar
         return $html;
     }
 
-    public function checkShedule($tradesmanID, $sheduledtime, $date,$conn)
+    public function checkShedule($tradesmanID, $sheduledtime, $date)
     {
         $canSchedule = TRUE;
         // $conn = mysqli_connect("localhost", "root", "", "quickfix_database", "3310");

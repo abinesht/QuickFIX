@@ -1,7 +1,9 @@
 <?php
 include 'header.php';
 include 'calendar.php';
-$tradesman_id = 1;
+// $tradesman_id = 17;
+$tradesman_id = $_SESSION['customer_id'];
+// $tradesman_id = $_GET['tradesman_id'];
 
 $tradesmanObj = new Tradesman();
 $tradesmanObj->read($tradesman_id);
@@ -48,7 +50,7 @@ $tradesmanObj->read($tradesman_id);
         }
     }
 
-    
+
 
     /*------------------------------------------------------------------------*/
     .calendar {
@@ -238,7 +240,7 @@ $tradesmanObj->read($tradesman_id);
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-3" id="photo">
                         <div class="text-center">
-                            <img src= <?php $tradesmanObj->getImg()?> id="workerPhoto" class="" />
+                            <img src=<?php $tradesmanObj->getImg() ?> id="workerPhoto" class="" />
                         </div>
                         <div class="text-center pt-3">@<?= $tradesmanObj->getUsername() ?></div>
                     </div>
@@ -385,19 +387,19 @@ $tradesmanObj->read($tradesman_id);
                                 <div>Name &nbsp; &nbsp; :<span> <?= $customerObject->getFirstname() ?></span></div>
                                 <div>Address &nbsp;:<span> <?= $customerObject->getAddress() ?></span></div>
                                 <div><?= $hiringObject->getRegistered_dateTime(); ?></div>
-                                <?php 
+                                <?php
                                 $serviceID = $hiringObject->getService_id();
                                 $serviceObj = new Service();
                                 $serviceObj->read($serviceID);
-                                 ?>
-                                <div><?= $serviceObj->getService_name();?></div>
+                                ?>
+                                <div><?= $serviceObj->getService_name(); ?></div>
                             </div>
                         </div>
                         <div class="row">
                             <div>
-                                Hiring amount &nbsp;&nbsp; &nbsp;:<span> Rs <?= $hiringObject->getHiring_amount()?>/=</span>
+                                Hiring amount &nbsp;&nbsp; &nbsp;:<span> Rs <?= $hiringObject->getHiring_amount() ?>/=</span>
                             </div>
-                            <div>Payment method :<span> <?= $hiringObject->getPayment_method()?></span></div>
+                            <div>Payment method :<span> <?= $hiringObject->getPayment_method() ?></span></div>
                         </div>
                         <div class="row">
                             <div class="row">
@@ -412,10 +414,10 @@ $tradesmanObj->read($tradesman_id);
                             </div>
                             <div class="row">
                                 <div class="col-3 col-sm-3 col-md-2 col-lg-3 ">Review :</div>
-                                <?php 
-                                if($row['review']==NULL){
+                                <?php
+                                if ($row['review'] == NULL) {
                                     $review = "Not Given";
-                                }elseif($row['review']!=NULL){
+                                } elseif ($row['review'] != NULL) {
                                     $review = $row['review'];
                                 }
                                 ?>
@@ -428,24 +430,24 @@ $tradesmanObj->read($tradesman_id);
             }
 
             ?>
-             </div>
-           
+        </div>
 
-            <!-- ---------------------------------TOP SERVIES------------------------------------------- -->
 
-            <p id="top-services " class="h1 fw-bold p-3">
-                <span id="topServices" class="pe-5">TOP SERVICES</span>
-            </p>
+        <!-- ---------------------------------TOP SERVIES------------------------------------------- -->
 
-            <!-- ---------------------------------PLUMBER  BOX------------------------------------------- -->
-            <div class="row d-flex justify-content-evenly">
+        <p id="top-services " class="h1 fw-bold p-3">
+            <span id="topServices" class="pe-5">TOP SERVICES</span>
+        </p>
+
+        <!-- ---------------------------------PLUMBER  BOX------------------------------------------- -->
+        <div class="row d-flex justify-content-evenly">
             <?php
             require_once('classes.php');
             $sql = "SELECT * FROM service Order by average_rating DESC limit 4;";
-            $result =QueryHandler::query($sql);
+            $result = QueryHandler::query($sql);
             while ($row = mysqli_fetch_array($result)) {
-                    $serviceObject = new Service();
-                    $serviceObject->read($row['service_id']);
+                $serviceObject = new Service();
+                $serviceObject->read($row['service_id']);
 
             ?>
 
@@ -466,7 +468,7 @@ $tradesmanObj->read($tradesman_id);
                             <div class="fw-bolder"><?= $serviceObject->getTotal_hirings() ?> Total Order</div>
                             <div class="fw-bolder">
                                 <p class="">
-                                    Avg Rating  <?= $serviceObject->getAverage_rating() ?>
+                                    Avg Rating <?= $serviceObject->getAverage_rating() ?>
                                     <span id="star" class="material-icons"> grade</span>
                                 </p>
                             </div>
@@ -474,11 +476,11 @@ $tradesmanObj->read($tradesman_id);
                     </div>
                 </div>
 
-                <?php } ?>
+            <?php } ?>
 
-             
-            </div>
+
         </div>
+    </div>
 </body>
 
 </html>
@@ -488,169 +490,61 @@ $tradesmanObj->read($tradesman_id);
         // console.log('documemt ready');
         let tradesman_id = <?php echo $tradesman_id ?>;
 
-        function getCount(view = '') {
+       
+        // function interval(tradesman_id = '') {
+        //     console.log("interval start");
+        //     $.ajax({
 
-            $.ajax({
-
-                url: "countSchedule.php",
-                method: "POST",
-                data: {
-                    view: tradesman_id
-                },
-                dataType: "json",
-                success: function(data) {
-                    console.log('success');
-                    if (data.unseen_notification > 0) {
-                        $('.count').html(data.unseen_notification);
-                    }
-                }
-            });
-        }
-
-        function interval(tradesman_id = '') {
-            console.log("interval start");
-            $.ajax({
-
-                url: "interval.php",
-                method: "POST",
-                data: {
-                    tradesman_id: tradesman_id
-                },
-                dataType: "json",
-                success: function(data) {
-                    console.log('success interval');
-                    console.log(data);
-                }
-            });
-        }
-        
-        getCount();
-
-        function insertNotification(type, sheduleID, view = '') {
-            $.ajax({
-                url: "insertC.php",
-                method: "POST",
-                data: {
-                    view: view,
-                    type: type,
-                    sheduleID: sheduleID
-                },
-                dataType: "json",
-                success: function(data) {
-                    load_unseen_notification('yes');
-                    console.log("insert notification success");
-                }
-            });
-        }
-
-        setInterval(function() {
-            getCount();
+        //         url: "interval.php",
+        //         method: "POST",
+        //         data: {
+        //             tradesman_id: tradesman_id
+        //         },
+        //         dataType: "json",
+        //         success: function(data) {
+        //             console.log('success interval');
+        //             console.log(data);
+        //         }
+        //     });
+        // }
 
 
-        }, 5000);
+       
+       
 
 
 
-        function load_unseen_notification(view = '') {
-            let tradesman_id = <?php echo $tradesman_id ?>;
-            $.ajax({
-                url: "fetchOK.php",
-                method: "POST",
-                data: {
-                    tradesman_id: tradesman_id,
-                    view: view
-                },
-                dataType: "json",
-                success: function(data) {
-                    $('.dropdown-menu').html(data.notification);
-                    getCount();
-                    // console.log("load_unseen_notification success");
-                }
-            });
-        }
 
 
 
-        load_unseen_notification();
-
-        $(document).on('click', '#drop-down', function() {
-            console.log("drop down clicked....");
-            $('.count').html('');
-            load_unseen_notification('yes');
-            console.log("dropdown success");
-        });
 
 
-
-        $(document).on("click", "#accept", function() {
-            $("#hirehim_modalFinal").modal({
-                show: true
-            });
-            let del = $(this);
-            let sheduleID = $(this).attr("data-id");
-            insertNotification("accept", sheduleID);
-            let hiring_id;
-            $.ajax({
-                type: "get",
-                data: {
-                    sheduleID: sheduleID
-                },
-                url: "schedule.php",
-                success: function(data) {
-                    hiring_id = data;
-                    location.href = "http://localhost/quickfix/avines/ongoing/chatTradesman.php?hiring_id=" + hiring_id;
-                }
-            });
-
-        });
-        $(document).on("click", "#schedule", function() {
-            $("#hirehim_modalFinal").modal({
-                show: true
-            });
-            let del = $(this);
-            let sheduleID = $(this).attr("data-id");
-            insertNotification("accept", sheduleID);
-            console.log("schedule clicked");
-            let hiring_id;
-            $.ajax({
-                type: "get",
-                data: {
-                    sheduleID: sheduleID
-                },
-                url: "scheduleHiring.php",
-                success: function(data) {
-                    console.log(data);
-                    // location.href = "http://localhost/quickfix/avines/ongoing/chatTradesman.php?hiring_id="+hiring_id;
-                }
-            });
-
-        });
+     
 
 
-        $(document).on("click", "#decline", function() {
-            $("#hirehim_modalFinal").modal({
-                show: true
-            });
-            let del = $(this);
-            let sheduleID = $(this).attr("data-id");
-            insertNotification("decline", sheduleID);
-            $.ajax({
-                type: "post",
-                data: {
-                    sheduleID: sheduleID
-                },
-                url: "decline.php",
-                success: function(data) {
-                    console.log("schedule ID is : ");
-                    console.log(sheduleID);
+        // $(document).on("click", "#done", function() {
 
-                    console.log("decline clicked....");
+        //     let del = $(this);
 
-                }
-            });
-        });
+
+        //     let sheduleID = $(this).attr("data-id");
+        //     // location.href = "http://localhost/quickfix/avines/chatTradesman.php?hiring_id=" + sheduleID;
+        //     $.ajax({
+        //         type: "get",
+        //         data: {
+        //             sheduleID: sheduleID
+        //         },
+        //         url: "done_ok.php",
+        //         success: function(data) {
+        //             load_unseen_notification();
+        //             console.log("done clicked....");
+
+        //         }
+        //     });
+        // });
 
         $(document).on("click", ".del", function() {
+            console.log("previous button cicked.");
             let del = $(this);
             let current_month = $(this).attr("data-id");
             var name = <?php echo $tradesman_id ?>;
@@ -662,13 +556,14 @@ $tradesmanObj->read($tradesman_id);
                 },
                 url: "previous.php",
                 success: function(data) {
+                    console.log(data);
                     $("#CalendarContent").html(data);
                 }
             });
         });
 
         $(document).on("click", ".del1", function() {
-            let del1 = $(this);
+            // let del1 = $(this);
             let current_month = $(this).attr("data-id");
             var name = <?php echo $tradesman_id ?>;
             $.ajax({
@@ -679,44 +574,8 @@ $tradesmanObj->read($tradesman_id);
                 },
                 url: "next.php",
                 success: function(data) {
+                    console.log(data);
                     $("#CalendarContent").html(data);
-                }
-            });
-        });
-        $(document).on("click", "#ok", function() {
-
-            let del = $(this);
-            let sheduleID = $(this).attr("data-id");
-            $.ajax({
-                type: "get",
-                data: {
-                    sheduleID: sheduleID
-                },
-                url: "done_ok.php",
-                success: function(data) {
-                    load_unseen_notification();
-                    console.log("done clicked....");
-
-                }
-            });
-        });
-
-        $(document).on("click", "#done", function() {
-
-            let del = $(this);
-
-
-            let sheduleID = $(this).attr("data-id");
-            // location.href = "http://localhost/quickfix/avines/chatTradesman.php?hiring_id=" + sheduleID;
-            $.ajax({
-                type: "get",
-                data: {
-                    sheduleID: sheduleID
-                },
-                url: "done_ok.php",
-                success: function(data) {
-                    load_unseen_notification();
-                    console.log("done clicked....");
 
                 }
             });

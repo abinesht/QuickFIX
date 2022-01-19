@@ -8,6 +8,7 @@ include 'header.php';
 <html>
 
 <head>
+<script src="./index.js"></script>
     <style>
         body {
             background: #f5f5f5;
@@ -31,19 +32,22 @@ include 'header.php';
 
             margin-right: 10px;
         }
+
         #fixed_map {
-        height: 22rem;
-        background-color: rgb(218, 236, 247);
-        border: solid #142f61;
-    }
+            height: 22rem;
+            background-color: rgb(218, 236, 247);
+            border: solid #142f61;
+        }
     </style>
-    
+
 </head>
 
 <body>
     <?php
-    $customerID = 2; // tradesman ID    JB
-    $customer_id_no = 1; // customer ID    
+    // $customerID = 1; // tradesman ID    JB
+    $customerID = $_GET['tradesman_id']; // tradesman ID    JB
+    $customer_id_no = $_SESSION['customer_id']; // customer ID    
+    // $customer_id_no = 18; // customer ID    
     $tradesmanObj = new Tradesman();
     $tradesmanObj->read($customerID);
     ?>
@@ -125,10 +129,10 @@ include 'header.php';
                         <?php
                         if ($tradesmanObj->getActive_status() == 'online') {
                         ?>
-                             <button class="offset-3 col-6 btn btn-sm fw-bold text-white rounded-pill " disabled id="" style="background: #142f61; font-size: 16px">
+                            <button class="offset-3 col-6 btn btn-sm fw-bold text-white rounded-pill " disabled id="" style="background: #142f61; font-size: 16px">
                                 Hire Now
                             </button>
-                           
+
                         <?php
                         } else {
                         ?>
@@ -141,7 +145,7 @@ include 'header.php';
 
                     </div>
                     <div class="row pb-4">
-                        <div id="scheduleNow" class=" offset-3 col-6 btn btn-sm fw-bold text-white rounded-pill " style="background: #142f61; font-size: 16px">
+                        <div id="scheduleNow" data-bs-toggle="modal" data-bs-target="#schedulehim_modal<?php echo $customerID;  ?>" class=" offset-3 col-6 btn btn-sm fw-bold text-white rounded-pill " style="background: #142f61; font-size: 16px">
                             Schedule Now
                         </div>
                     </div>
@@ -403,9 +407,9 @@ include 'header.php';
         <div class="modal-dialog modal-dialog-centered" id="modalBoxWidth">
             <!-- Modal content-->
             <div class="modal-content  mx-3">
-                <form action="" method="POST" id="hirespecificForm">
+                <form action="" method="POST" id="hireNowForm">
                     <div class="modal-header text-white py-1 m-0" id="modalTitle" style="background-color: #142f61;">
-                        <h5 class="modal-title" id="address-label-title">Register Details</h5>
+                        <h5 class="modal-title" id="address-label-title-HireSpecific">Register Details</h5>
                         <button type="button" class="btn-close bg-white text-white fw-bold" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
@@ -418,13 +422,13 @@ include 'header.php';
                             <fieldset id="group1">
                                 <?php
                                 $query_service_list = "SELECT * FROM service_of_tradesman  WHERE tradesman_id='$customerID'";
-                                $service_result =QueryHandler::query($query_service_list);
+                                $service_result = QueryHandler::query($query_service_list);
 
                                 if (mysqli_num_rows($service_result) > 0) {
                                     while ($row = mysqli_fetch_assoc($service_result)) {
                                 ?>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" id="serviceRadio" name="radio" value="<?php echo $row['service_id'] ?>"><?php echo $row['service_name'] ?>
+                                            <input required class="form-check-input" type="radio" id="serviceRadio" name="radio" value="<?php echo $row['service_id'] ?>"><?php echo $row['service_name'] ?>
                                         </div>
                                 <?php
                                     }
@@ -442,7 +446,7 @@ include 'header.php';
                             </div>
                             <fieldset id="group2">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="radioAddress" id="flexRadioDefault1" value="Use default Address">Use default Address
+                                    <input required class="form-check-input" type="radio" name="radioAddress" id="flexRadioDefault1" value="Use default Address">Use default Address
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="radioAddress" id="flexRadioDefault2" value="Pick new Address">Pick new Address
@@ -453,15 +457,15 @@ include 'header.php';
                     </div>
 
 
-                    <textarea class=" form-control" name="address" id="address-label" hidden></textarea>
-                    <input class="col-6" type="text" name="lng" id="lng" value="" hidden>
-                    <input class="col-6" type="text" name="lat" id="lat" value="" hidden>
+                    <textarea class=" form-control" name="address" id="address-label-HireSpecific" hidden></textarea>
+                    <input class="col-6" type="text" name="lng" id="lngHireSpecific" value="" hidden>
+                    <input class="col-6" type="text" name="lat" id="latHireSpecific" value="" hidden>
 
 
                     <div class="row">
                         <div class="col-md-12 modal_body_map">
                             <div class="location-map" id="location-map">
-                                <div style="width: 100%; height: 300px;" id="map"></div>
+                                <div style="width: 100%; height: 300px;" id="mapHireSpecific"></div>
                             </div>
                         </div>
                     </div>
@@ -481,53 +485,75 @@ include 'header.php';
                 </form>
 
                 <?php
-                if (isset($_POST['submit'])) {
-                    if (isset($_POST['radio'])) {
-                        if (isset($_POST['radioAddress'])) {
+                // if (isset($_POST['submit'])) {
+                //     if (isset($_POST['radio'])) {
+                //         if (isset($_POST['radioAddress'])) {
 
-                            $address;
-                            $lat;
-                            $lng;
-                            if ($_POST['radioAddress'] == "Use default Address") {
-                                $result = QueryHandler::query("SELECT * from customer WHERE customer_id='$customerID'");
-                                $data = mysqli_fetch_assoc($result);
-                                $address = $data['address'];
-                                $lat = $data['latitude'];
-                                $lng = $data['longitude'];
-                            } else {
-                                $address = $_POST['address'];
-                                $lat = $_POST['lat'];
-                                $lng = $_POST['lng'];
-                            }
-                            echo $address;
-                            echo $lat;
-                            echo $lng;
-                            echo $_POST['radioAddress'];
-                            echo $_POST['radio'];
-                        } else {
-                            echo "<script>alert('please select the Address type')</script>";
-                        }
-                    } else {
-                        echo "<script>alert('please select the service')</script>";
-                    }
-                }
+                //             $address;
+                //             $lat;
+                //             $lng;
+                //             if ($_POST['radioAddress'] == "Use default Address") {
+                //                 $result = QueryHandler::query("SELECT * from customer WHERE customer_id='$customerID'");
+                //                 $data = mysqli_fetch_assoc($result);
+                //                 $address = $data['address'];
+                //                 $lat = $data['latitude'];
+                //                 $lng = $data['longitude'];
+                //             } else {
+                //                 $address = $_POST['address'];
+                //                 $lat = $_POST['lat'];
+                //                 $lng = $_POST['lng'];
+                //             }
+                //             echo $address;
+                //             echo $lat;
+                //             echo $lng;
+                //             echo $_POST['radioAddress'];
+                //             echo $_POST['radio'];
+                //         } else {
+                //             echo "<script>alert('please select the Address type')</script>";
+                //         }
+                //     } else {
+                //         echo "<script>alert('please select the service')</script>";
+                //     }
+                // }
                 ?>
             </div>
         </div>
     </div>
-    
-    <div class="modal fade " id="hirehim_modal<?php echo $customer_id; ?>">
+
+    <div class="modal fade" id="schedulehim_modal<?php echo $customerID;  ?>">
         <div class="modal-dialog modal-dialog-centered" id="modalBoxWidth">
             <div class="modal-content  mx-3">
-                <form action="" method="POST" id="comment_form">
-                    <div class="modal-header text-white py-1 m-0" id="modalTitle">
-                        <h5 class="modal-title">Register Details</h5>
+                <form action="" method="POST" id="scheduleNowForm">
+                    <div class="modal-header text-white py-1 m-0" id="modalTitle" style="background-color: #142f61;">
+                        <h5 class="modal-title" id="address-label-title-ScheduleSpecific">Register Detailssss</h5>
                         <button type="button" class="btn-close bg-white text-white fw-bold" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div>
-                            <input type="hidden" class="form-control" id="sender_id" name="sender_id" value="<?php echo $customer_id_no; ?>">
-                            <input type="hidden" class="form-control" id="receiver_id" name="receiver_id" value="<?php echo $customerID; ?>">
+                        <input type="hidden" class="form-control" id="sender_id" name="sender_id" value="<?php echo $customer_id_no; ?>">
+                        <input type="hidden" class="form-control" id="receiver_id" name="receiver_id" value="<?php echo $customerID; ?>">
                     </div>
+                    <div class="row mx-2 fw-bold">
+                        <div class="fw-bold h5" id="selectService">
+                            Select Service
+                        </div>
+                        <fieldset id="group1">
+                            <?php
+                            $query_service_list = "SELECT * FROM service_of_tradesman  WHERE tradesman_id='$customerID'";
+                            $service_result = QueryHandler::query($query_service_list);
+
+                            if (mysqli_num_rows($service_result) > 0) {
+                                while ($row = mysqli_fetch_assoc($service_result)) {
+                            ?>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" id="serviceRadio" name="radio" value="<?php echo $row['service_id'] ?>"><?php echo $row['service_name'] ?>
+                                    </div>
+                            <?php
+                                }
+                            }
+                            ?>
+                        </fieldset>
+                    </div>
+
                     <div class="row fw-bold mx-2">
                         <div class="col-12 col-md-6">
                             <div class="fw-bold h5" id="dateAndTime">
@@ -551,35 +577,33 @@ include 'header.php';
                             <div class="fw-bold h5" id="selectLocation">
                                 Select Location
                             </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                                <label class="form-check-label" for="flexRadioDefault1">
-                                    Use default Address
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
-                                <label class="form-check-label" for="flexRadioDefault2">
-                                    Pick new Address
-                                </label>
-                            </div>
+
+                            <fieldset id="group2">
+                                <div class="form-check">
+                                    <input required class="form-check-input" type="radio" name="radioAddress" id="flexRadioDefault1" value="Use default Address">Use default Address
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="radioAddress" id="flexRadioDefault2" value="Pick new Address">Pick new Address
+                                </div>
+                            </fieldset>
 
                         </div>
 
                     </div>
+                    <textarea class=" form-control" name="address1" id="address-label-ScheduleSpecific" hidden></textarea>
+                    <input class="col-6" type="text" name="lng1" id="lngScheduleSpecific" value="" hidden >
+                    <input class="col-6" type="text" name="lat1" id="latScheduleSpecific" value="" hidden>
 
-                    <div id="tradesman_map " class="row mx-3 p-0 bg-warning">
-
-                        <div id="fixed_map"></div>
-                    </div>
 
                     <div class="row">
                         <div class="col-md-12 modal_body_map">
                             <div class="location-map" id="location-map">
-                                <div style="width: 100%; height: 300px;" id="map"></div>
+                                <div style="width: 100%; height: 300px;" id="mapScheduleSpecific"></div>
                             </div>
                         </div>
                     </div>
+
+   
 
                     <div class=" d-flex flex-row-reverse mx-3">
                         <div class="">
@@ -613,57 +637,34 @@ include 'header.php';
     </div>
 
     <script>
-        initMap(9.6615,  80.0255);
+        // initMap(9.6615,  80.0255);
         $(document).ready(function() {
             console.log("laksi");
-
-            $('#comment_form').on('submit', function(event) {
-                    let customer_id = $('#hirehimfinal<?php echo $customer_id; ?>').attr("data-id");
-                    event.preventDefault();
+            initMapHireSpecific();
+            initMapScheduleSpecific();
+            $('#scheduleNowForm').on('submit', function(event) {
+                let customer_id = $('#hirehimfinal<?php echo $customer_id; ?>').attr("data-id");
+                event.preventDefault();
+                var form_data = $(this).serialize();
+                if ($('#date').val() != '' && $('#time').val() != '') {
                     var form_data = $(this).serialize();
-                    if ($('#date').val() != '' && $('#time').val() != '') {
-                        var form_data = $(this).serialize();
-                        $.ajax({
-                            url: "insert.php",
-                            method: "POST",
-                            data: form_data,
-                            success: function(data) {
-                                $('#comment_form')[0].reset();
-                                load_unseen_notification();
-                            }
-                        });
-                    } else {
-                        alert("Both Fields are Required");
-                        console.log("Aler msg = #date");
-                    }
-                });
-
-            $("#scheduleNow").click(function() {
-                console.log("hirehim clicked");
-                $("#hirehim_modal<?php echo $customer_id; ?>").modal({
-                    show: true
-                });
+                    $.ajax({
+                        url: "insertSchedule.php",
+                        method: "POST",
+                        data: form_data,
+                        success: function(data) {
+                            $('#scheduleNowForm')[0].reset();
+                            load_unseen_notification();
+                            console.log(data);
+                        }
+                    });
+                } else {
+                    alert("Both Fields are Required");
+                    console.log("Aler msg = #date");
+                }
             });
 
-            $("#hirehimfinal<?php echo $customer_id; ?>").click(function() {
-                $("#hirehim_modalFinal<?php echo $customer_id; ?>").modal({
-                    show: true
-                });
-            });
-
-            console.log("clicked");
-            $("#hirenowbtn").click(function() {
-                console.log("click");
-                $("#hirehim_modal<?php echo $customerID;  ?>").modal({
-                    show: true
-                });
-            });
-
-            setInterval(function() {
-                getCount();
-            }, 5000);
-
-            $('#hirespecificForm').on('submit', function(event) {
+            $('#hireNowForm').on('submit', function(event) {
                 var form_data = $(this).serialize();
                 console.log(form_data);
                 let tradesman_id = <?php echo $customerID; ?>;
@@ -674,131 +675,29 @@ include 'header.php';
                 console.log(receiver_id);
                 if ($('#receiver_id').val() != '') {
                     $.ajax({
-                        url: "insert.php",
+                        url: "insertHirenow.php",
                         method: "POST",
                         data: form_data,
                         success: function(data) {
                             console.log("hire specific form success");
-                            $('#hirespecificForm')[0].reset();
+                            $('#hireNowForm')[0].reset();
                             $('id2').html(data);
+                            console.log(data);
                         }
                     });
                 }
             });
 
-            function getCount(view = '') {
-                let customer_id = <?php echo $customer_id_no ?>;
-                $.ajax({
 
-                    url: "countSchedule.php",
-                    method: "POST",
-                    data: {
-                        view: customer_id
-                    },
-                    dataType: "json",
-                    success: function(data) {
-                        // $('#msgFromSchedulePage').html(data);
-
-                        if (data.unseen_notification > 0) {
-                            $('.count').html(data.unseen_notification);
-                        }
-                    }
-                });
-            }
-            // getCount();
-
-            function insertNotification(view = '') {
-                $.ajax({
-                    url: "insertC.php",
-                    method: "POST",
-                    data: {
-                        view: view
-                    },
-                    dataType: "json",
-                    success: function(data) {
-                        $('#insertC').html(data.notification);
-                        // $('#msgFromSchedulePage').html(data);
-                        load_unseen_notification('yes');
-                    }
-                });
-            }
-
-
-            function load_unseen_notification(view = '') {
-                let tradesman_id = <?php echo $customer_id_no ?>;
-                console.log(tradesman_id);
-                $.ajax({
-                    url: "fetchOK.php",
-                    method: "POST",
-                    data: {
-                        view: view,
-                        tradesman_id: tradesman_id
-                    },
-                    dataType: "json",
-                    success: function(data) {
-                        // $('#msgFromSchedulePage').html(data);
-                        $('.dropdown-menu').html(data.notification);
-                        getCount();
-                    }
-                });
-            }
-            load_unseen_notification();
-            console.log("hiiii");
-            $(document).on('click', '#drop-down', function() {
-                console.log("drop down clicked....");
-                $('.count').html('');
-                load_unseen_notification('yes');
-            });
-
-            $(document).on("click", "#done", function() {
-
-                let del = $(this);
-                let sheduleID = $(this).attr("data-id");
-                console.log("notification id is ");
-                console.log(sheduleID);
-                let hiring_id;
-                $.ajax({
-                    type: "get",
-                    data: {
-                        sheduleID: sheduleID
-                    },
-                    url: "done_ok.php",
-                    success: function(data) {
-                        load_unseen_notification();
-                        console.log(data);
-                        hiring_id = data;
-                        location.href = "http://localhost/quickfix_kesavi/ongoing/chatCustomer.php?hiring_id=" + hiring_id;
-
-                    }
-                });
-            });
-
-            $(document).on("click", "#ok", function() {
-
-                let del = $(this);
-                let sheduleID = $(this).attr("data-id");
-                $.ajax({
-                    type: "get",
-                    data: {
-                        sheduleID: sheduleID
-                    },
-                    url: "done_ok.php",
-                    success: function(data) {
-                        load_unseen_notification();
-                        console.log("done clicked....");
-
-                    }
-                });
-            });
+           
 
 
         });
     </script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
-        <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
-    <script
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB2psniVzC9cwc5r1b6xt3ggfhFUt0DvsA&callback=initMap"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB2psniVzC9cwc5r1b6xt3ggfhFUt0DvsA"></script>
 
 
 </body>
