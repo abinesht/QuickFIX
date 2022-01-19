@@ -642,7 +642,7 @@ if (isset($_SESSION['tradesman_id_for_hire_now'])) {
 
                                     </div>
                                     <div class="col">
-                                       <a href="user_merge.php?tradesman_id=<?php echo $tradesman_id; ?>">  <button class="button schedule_one_tradesman fw-bold" type="button" data-bs-toggle="modal" data-bs-target="#modal_schedule_one_tradesman">Schedule Now </button> </a>
+                                    <a href="user_merge.php?tradesman_id=<?php echo $tradesman_id; ?>">  <button class="button schedule_one_tradesman fw-bold" type="button" data-bs-toggle="modal" data-bs-target="#modal_schedule_one_tradesman">Schedule Now </button> </a>
 
                                     </div>
                                 </div>
@@ -899,9 +899,9 @@ if (isset($_SESSION['tradesman_id_for_hire_now'])) {
                                         <div class="col-8  text-center fw-bold">
 
                                         
-                    <textarea class=" form-control" name="address" id="address-label-HireAny" hidden value="<?php echo $_SESSION['address'];?>"></textarea>
-                    <input class="col-6" type="text" name="lng" id="lngHireAny" value="" hidden value="<?php echo $_SESSION['lat'];?>">
-                    <input class="col-6" type="text" name="lat" id="latHireAny" value="" hidden value="<?php echo $_SESSION['lng'];?>">
+                                            <input class=" form-control" name="address" id="address-label-HireAny" hidden value="<?php echo $_SESSION['address'];?>"></input>
+                                            <input class="col-6" type="text" name="lng" id="lngHireAny"  hidden value="<?php echo $_SESSION['lat'];?>">
+                                            <input class="col-6" type="text" name="lat" id="latHireAny" hidden value="<?php echo $_SESSION['lng'];?>">
                                             <input type="hidden" class="form-control" id="sender_id" name="sender_id" value="<?php echo $customer_id; ?>">
                                             <input type="hidden" class="form-control" id="time" name="time" value="<?php echo $_SESSION['time']; ?>">
                                             <input type="hidden" class="form-control" id="date" name="date" value="<?php echo $_SESSION['date']; ?>">
