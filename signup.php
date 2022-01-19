@@ -77,7 +77,9 @@ if (array_key_exists("signup", $_POST)) {
                         </div>
                         <div class="row">
                             <div class="col-sm-6 form-group m-3 mb-4 mx-auto ">
-                                <input type="text" class="form-control" name="username" id="username" placeholder="USER NAME" required>
+                                <input type="text" class="form-control" name="username" id="username" placeholder="USER NAME" required 
+                                pattern="^(?=.*[A-Za-z]{1,13})(?=.*[A-Za-z0-9]{1,13}).{8,16}$"
+                                oninvalid="this.setCustomValidity('Enter a valid username with the length 8-16')">
                             </div>
 
                             <div class="col-sm-6">
@@ -93,14 +95,16 @@ if (array_key_exists("signup", $_POST)) {
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class=" form-group input-group m-3 mb-4 mx-auto">
-                                    <input type="password" id="password" name="password" class="form-control" placeholder="PASSWORD" style="border-right: none;">
+                                    <input type="password" id="password" name="password" class="form-control" placeholder="PASSWORD" style="border-right: none;" required
+                                    pattern="^(?=.*[A-Z]{1,17})(?=.*[!@#$&*]{1,17})(?=.*[0-9]{1,17})(?=.*[A-Za-z]{1,17}).{8,20}$"
+                                    oninvalid="this.setCustomValidity('Enter a strong password with the length 8-20.')">
                                     <span class="input-group-text eye"><i id="eye-icon-open-p" class="fas fa-eye eye-icon-p"></i><i class="fas fa-eye-slash eye-icon-p"></i></span>
                                 </div>
                             </div>
 
                             <div class="col-sm-6">
                                 <div class="form-group input-group m-3 mb-2 mx-auto">
-                                    <input type="password" id="cpassword" name="confirmpassword" class="form-control" placeholder="CONFIRM PASSWORD" style="border-right: none;">
+                                    <input type="password" id="cpassword" name="confirmpassword" class="form-control" placeholder="CONFIRM PASSWORD" style="border-right: none;" required>
                                     <span class="input-group-text eye"><i id="eye-icon-open-cp" class="fas fa-eye eye-icon-cp"></i><i class="fas fa-eye-slash eye-icon-cp"></i></span>
                                 </div>
                             </div>

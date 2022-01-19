@@ -45,13 +45,14 @@ $htmlContent = "";
 
             while ($row = mysqli_fetch_assoc($result)) {
                 // $customerObject = new Customer($row['customer_id']);
-                $tradesmanObject = new Tradesman();
-                $tradesmanObject->read($row['tradesman_id']);
-                if (date('m', strtotime($row['date'])) == $current_month  && date('Y', strtotime($row['date'])) == $current_year) {
-                    $count1 = $count1 + 1;
+                $tradesmanObject = Tradesman::getInstance($row['tradesman_id']);
+                if(!is_null($tradesmanObject)){
+                    if (date('m', strtotime($row['date'])) == $current_month  && date('Y', strtotime($row['date'])) == $current_year) {
+                        $count1 = $count1 + 1;
 
-                    $calendar->add_event($tradesmanObject->getUsername(), $row['date'], 1, 'green', $row['time']);
-                    echo  '<li class="fw bold h5">' . date('M j ,', strtotime($row['date'])) . ' ' . date('g:i a', strtotime($row['time'])) . ' - ' . $tradesmanObject->getUsername() . ' - ' . $row['service_name'] . '</li>';
+                        $calendar->add_event($tradesmanObject->getUsername(), $row['date'], 1, 'green', $row['time']);
+                        echo  '<li class="fw bold h5">' . date('M j ,', strtotime($row['date'])) . ' ' . date('g:i a', strtotime($row['time'])) . ' - ' . $tradesmanObject->getUsername() . ' - ' . $row['service_name'] . '</li>';
+                    }
                 }
             }
             if ($count1 == 0) {

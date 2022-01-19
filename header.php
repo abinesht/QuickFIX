@@ -8,13 +8,10 @@ if (!array_key_exists("customer_id", $_SESSION)) {
     $tradesman;
     $customer;
     $user;
-    $customer = new Customer();
-    $customer->read($_SESSION["customer_id"]);
+    $customer = Customer::getInstance($_SESSION["customer_id"]);
 
     if ($customer->getIs_worker() == 1) {
-        $tradesman = new Tradesman();
-        $tradesman->read($_SESSION["customer_id"]);
-
+        $tradesman = Tradesman::getInstance($_SESSION["customer_id"]);
         if (array_key_exists("login", $_SESSION)) {
             $tradesman->login();
             unset($_SESSION['login']);
@@ -25,6 +22,11 @@ if (!array_key_exists("customer_id", $_SESSION)) {
 
         if (array_key_exists("switch", $_POST)) {
             $tradesman->switch();
+            if ($tradesman->getState() instanceof TradesmanAsTradesman) {
+                header("Location: tradesmanHome.php?Home=?");
+            }else{
+                header("Location: customerHome.php?Home=?");
+            }
         }
         if (isset($tradesman) && ($tradesman->getState() instanceof TradesmanAsTradesman)) {
             $user = $tradesman;
@@ -67,26 +69,11 @@ function hidefor($userType, $user)
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- Bootstrap CSS -->
-    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
-    </script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
-    </script> -->
-
-    <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
-    </script> -->
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script> -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> <!--  This script for dropdown notification view. is I comment this, dropdown not visible. -->
-
-    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" /> -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/fontawesome.min.css" integrity="sha384-jLKHWM3JRmfMU0A5x5AkjWkw/EYfGUAGagvnfryNV3F9VqM98XiIH7VBGVoxVSc7" crossorigin="anonymous">
     <title>QuickFIX</title>
@@ -115,7 +102,7 @@ function hidefor($userType, $user)
                         <li class="dropdown">
                             <!-- <a href="#" id="drop-down" class="dropdown-toggle " data-toggle="dropdown"> -->
                             <!-- </a> -->
-                            <ul class="searchmenu-item text-white  m-0 p-1" style="list-style-type: none; background-color: #142F61;  font-weight: bold;  position: relative;z-index: 2;"></ul>
+                            <ul class="searchmenu-item  m-0 p-0" style="list-style-type: none;"></ul>
                         </li>
                     </ul>
 
@@ -125,41 +112,35 @@ function hidefor($userType, $user)
             <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
                 <ul class="navbar-nav navbar-center mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a id="Home" class="nav-link <?php if (array_key_exists("Service", $_GET)) {
-                                                            echo 'active';
-                                                        } ?>" aria-current="page" href="<?php if (get_class($user)) {
-                                                                                            echo './customerHome.php?Home=';
-                                                                                        } else {
-                                                                                            echo './tradesmanHome.php?Home=';
-                                                                                        } ?>" style="color:black; text-align:center">Home</a>
+                        <a id="Home" class="nav-link <?php if (array_key_exists("Home", $_GET)) {echo 'active-header';} ?>" 
+                        aria-current="page" href="
+                        <?php if (get_class($user)=="Customer") {
+                                echo './customerHome.php?Home=';
+                            } else {
+                                echo './tradesmanHome.php?Home=';} 
+                        ?>" style="color:black; text-align:center">Home</a>
                     </li>
                     <li class="nav-item" <?php hidefor(UserType::TRADESMAN, $user); ?>>
                         <a id="Services" class="nav-link <?php if (array_key_exists("Service", $_GET)) {
-                                                                echo 'active';
+                                                                echo 'active-header';
                                                             } ?>" href="./customerServicesView.php?Service=" style="color:black; text-align:center">Services</a>
                     </li>
                     <li class="nav-item">
-                        <a id="abc12" class="nav-link" href="./tradesmanMyHirings.php?Hirings=jlhjs" style="color:black; text-align:center">MyHirings</a>
+                        <a id="MyHirings" class="nav-link <?php if (array_key_exists("Hirings", $_GET)) {
+                                                                echo 'active-header';
+                                                            } ?>" href="<?php if (get_class($user)=="Customer") {
+                                                                echo './customerMyHirings.php?Hirings=';
+                                                            } else {
+                                                                echo './tradesmanMyHirings.php?Hirings=';} 
+                                                        ?>" style="color:black; text-align:center">MyHirings</a>
                     </li>
                     <li class="nav-item" <?php hidefor(UserType::TRADESMAN, $user); ?>>
                         <a class="nav-link <?php if (array_key_exists("Aboutus", $_GET)) {
-                                                echo 'active';
+                                                echo 'active-header';
                                             } ?>" href="./AboutUs.php?Aboutus=" style="color:black; text-align:center">AboutUs</a>
                     </li>
                 </ul>
             </div>
-
-            <!-- Notification icon-->
-            <!-- <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <a href="#"  id="drop-down" class="dropdown-toggle btn btn-danger" data-toggle="dropdown">
-                        <span class="material-icons"> notifications</span>
-                        <span class="label label-pill label-danger count" style="border-radius:10px;"></span>
-                        <span class="glyphicon glyphicon-envelope" style="font-size:18px;"></span>
-                    </a>
-                    <ul class="dropdown-menu"></ul>
-                </li>
-            </ul> -->
 
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
@@ -168,7 +149,7 @@ function hidefor($userType, $user)
                         <span class="label label-pill label-danger count" style="border-radius:10px;"></span>
                         <span class="glyphicon glyphicon-envelope" style="font-size:18px;"></span>
                     </a>
-                    <ul id="notification_ul" class="dropdown-menu overflow-auto" style=" height: 30rem; width: 15rem;">
+                    <ul id="notification_ul" class="dropdown-menu overflow-auto" style="margin-left: -200px; min-width: 18rem;">
 
                     </ul>
 
@@ -203,9 +184,10 @@ function hidefor($userType, $user)
                             </form>
                         </div>
                     </div>
-
+                    
+                    
                     <div class="mt-1 text-center mb-1"><a href="customerEditProfile.php" role="button" class="btn btn-primary rounded-pill mt-2 dropdownbtn w-100" name="editprofile">Edit Profile</a></div>
-                    <div class="mt-1 text-center mb-1" <?php hidefor(UserType::CUSTOMER, $user); ?>><a href="customerEditProfile.php" role="button" class="btn btn-primary rounded-pill mt-2 dropdownbtn w-100" name="On-going Hiring">On-going Hiring</a></div>
+                    
                     <div class="dropdownp mx-2" <?php hidefor(UserType::TRADESMAN, $user); ?>><?php echo $user->getPhone_no(); ?></div>
                     <div class="dropdownp mx-2" <?php hidefor(UserType::TRADESMAN, $user); ?>><?php echo $user->getEmail(); ?></div>
                     <hr style="height:4px; border:none; color:#142F61;" <?php hidefor(UserType::TRADESMAN, $user); ?>>
@@ -232,7 +214,32 @@ function hidefor($userType, $user)
                     <div class="text-center mb-2"><button class="btn btn-primary rounded-pill mt-2 dropdownbtn w-100" data-bs-toggle="modal" data-bs-target="#staticBackdropRAC" <?php if ($user->getIs_worker() == UserType::TRADESMAN) {
                                                                                                                                                                                         echo 'hidden';
                                                                                                                                                                                     } ?>>Register as Tradesman</button></div>
-                    <div class="text-center mb-1"><a href="header.php?logout=" role="button" class="btn btn-primary rounded-pill dropdownbtn w-100" name="logout">Logout</a></div>
+                    
+                    <?php
+                        $ongoinghref="#";
+                        $id = $user->getCustomer_id();
+                        if (get_class($user)=="Customer") {
+                            $query = "SELECT `hiring_id` FROM `hiring` WHERE customer_id = $id AND final_status = 'On going' ORDER BY hiring_id DESC LIMIT 1";
+                            $result = QueryHandler::query($query);
+                            if ($result->num_rows ==1) {
+                                $row=$result->fetch_assoc();
+                                $hid=$row["hiring_id"];
+                                $ongoinghref = "chatCustomer.php?hiring_id=$hid";
+                            }
+                        }else{
+                            $query =  "SELECT `hiring_id` FROM `hiring` WHERE tradesman_id = $id AND final_status = 'On going' ORDER BY hiring_id DESC LIMIT 1";
+                            $result = QueryHandler::query($query);
+                            if ($result->num_rows ==1) {
+                                $row=$result->fetch_assoc();
+                                $hid=$row["hiring_id"];
+                                $ongoinghref = "chatTradesman.php?hiring_id=$hid";
+                            }
+
+                        }
+                    ?>
+                    
+                    <div class="mt-1 text-center mb-2" ><a href= <?= $ongoinghref ?> role="button" class="btn btn-primary rounded-pill mt-2 dropdownbtn w-100" name="On-going Hiring">On-going Hiring</a></div>
+                    <div class="text-center mb-1"><a href="header.php?logout=" role="button" class="btn btn-primary rounded-pill dropdownbtn w-100 mt-2" name="logout">Logout</a></div>
                 </ul>
             </ul>
 
@@ -296,25 +303,6 @@ function hidefor($userType, $user)
                 getCount();
             }, 5000);
 
-            // getRecentSchedule(1);
-
-            function getRecentSchedule(tradesman_idd) {
-                console.log("get recent start");
-                console.log(tradesman_idd);
-                
-                $.ajax({
-                    url: "getRecentSchedule.php",
-                    method: "POST",
-                    data: {
-                        tradesman_id: tradesman_idd
-                    },
-                    success: function(data) {
-                        // $('#msgFromSchedulePage').html(data);
-                        console.log("get recent sucess.........");
-                        console.log(data);
-                    }
-                });
-            }
 
             function getCount(view = '') {
                 let customer_id = <?php echo $customer_id ?>;
@@ -341,24 +329,24 @@ function hidefor($userType, $user)
             // getCount();
 
             function insertNotification(type, sheduleID, view = '') {
-                console.log("insert notification start");
-                console.log(type, sheduleID);
-                $.ajax({
-                    url: "insertC.php",
-                    method: "POST",
-                    data: {
-                        view: view,
-                        type: type,
-                        sheduleID: sheduleID
-                    },
-                    dataType: "json",
-                    success: function(data) {
-                        load_unseen_notification('yes');
-                        console.log("insert notification success");
-                        console.log(data);
-                    }
-                });
-            }
+            console.log("insert notification start");
+            console.log(type,sheduleID);
+            $.ajax({
+                url: "insertC.php",
+                method: "POST",
+                data: {
+                    view: view,
+                    type: type,
+                    sheduleID: sheduleID
+                },
+                dataType: "json",
+                success: function(data) {
+                    load_unseen_notification('yes');
+                    console.log("insert notification success");
+                    console.log(data);
+                }
+            });
+        }
 
             function load_unseen_notification(view = '') {
                 let tradesman_id = <?php echo $customer_id ?>;
@@ -406,7 +394,7 @@ function hidefor($userType, $user)
                         load_unseen_notification();
                         console.log(data);
                         hiring_id = data;
-                        location.href = "http://localhost/quickfix/final/QuickFIX/chatCustomer.php?hiring_id=" + hiring_id;
+                        // location.href = "http://localhost/quickfix/avines/ongoing/chatCustomer.php?hiring_id=" + hiring_id;
 
                     }
                 });
@@ -430,7 +418,7 @@ function hidefor($userType, $user)
                     }
                 });
             });
-
+          
             $(document).on("click", "#accept", function() {
 
                 $("#hirehim_modalFinal").modal({
@@ -451,7 +439,7 @@ function hidefor($userType, $user)
                         load_unseen_notification();
                         hiring_id = data;
                         console.log(data);
-                        location.href = "http://localhost/quickfix/final/QuickFIX/chatTradesman.php?hiring_id=" + hiring_id;
+                        // location.href = "http://localhost/quickfix/avines/ongoing/chatTradesman.php?hiring_id=" + hiring_id;
                     }
                 });
 
@@ -498,7 +486,7 @@ function hidefor($userType, $user)
                     success: function(data) {
                         console.log("schedule ID is : ");
                         load_unseen_notification();
-
+                       
 
                         console.log("decline clicked success....");
 

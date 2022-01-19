@@ -6,9 +6,14 @@ include 'header.php';
 <html>
 
 <head>
-<head>
- <title>Customer Services</title>
-</head>
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
     <style>
         /*--------------------------------------SERVICES -------------------------------------------*/
         #service_image {
@@ -71,7 +76,19 @@ include 'header.php';
             position: relative;
             top: -4rem;
         }
+        .dropdownbtn {
+        background-color: #142f61;
+        font-weight: bold;
+        border: none;
+        }
 
+        .dropdownbtn:focus {
+        box-shadow: none;
+        background-color: #142f61;
+        }
+        .dropdownbtn:hover {
+        background-color: #1d345f;
+        }
 
         @media (max-width: 768px) {
             #service_detail {
@@ -382,3 +399,5 @@ include 'header.php';
 </body>
 
 </html>
+
+<?php include 'footer.php' ?>

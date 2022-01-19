@@ -10,14 +10,11 @@ else
     $tradesman;
     $customer;
     $user;
-    $customer =new Customer();
-    $customer -> read($_SESSION["customer_id"]);
+    $customer =Customer::getInstance($_SESSION["customer_id"]);
     
     if($customer->getIs_worker() == 1)
     {
-        $tradesman =new Tradesman();
-        $tradesman -> read($_SESSION["customer_id"]);
-        
+        $tradesman = Tradesman::getInstance($_SESSION["customer_id"]);
         if (array_key_exists("login", $_SESSION)) {
             $tradesman->login();
             unset($_SESSION['login']);

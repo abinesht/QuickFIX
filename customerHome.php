@@ -70,7 +70,7 @@ $customer_id = $user->getCustomer_id();
                     <div id="box" class="row ">
 
                         <div class="col text-center">
-                            <img id="job_images" class="" src="Assets/Images/plumber.jpg" alt="" />
+                            <img id="job_images" class="" src="Assets/Images/<?php echo $row['cover_photo']; ?>" alt="" />
                         </div>
                         <div id="service_detail " class="  col pt-3 d-flex  flex-column  align-items-xs-center align-items-md-center align-items-lg-start">
                             <div id="job" class=" d-flex text-center fw-bold h5 mt-1">
@@ -117,8 +117,7 @@ $customer_id = $user->getCustomer_id();
                             $count = 0;
 
                             while ($row = mysqli_fetch_assoc($result)) {
-                                $tradesmanObj = new Tradesman();
-                                $tradesmanObj->read($row['tradesman_id']);
+                                $tradesmanObj = Tradesman::getInstance($row['tradesman_id']);
                                 // echo $row['customer_id'];
                                 if (date('m', strtotime($row['date'])) == $current_month  && date('Y', strtotime($row['date'])) == $current_year) {
                                     $count = $count + 1;

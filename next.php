@@ -55,7 +55,7 @@ $htmlContent = "";
       $count = 0;
 
       while ($row = mysqli_fetch_assoc($result)) {
-        $customerObject = new Customer($row['customer_id']);
+        $customerObject = Customer::getInstance($row['customer_id']);
         
         if (date('m', strtotime($row['date'])) == $current_month  && date('Y', strtotime($row['date'])) == $current_year) {
           $count = $count + 1;

@@ -23,8 +23,7 @@ if (isset($_POST["view"])) {
         $lat = $row['latitude'];
    
         echo $sender_id.$receiver_id.$service_id;
-        $customer = new Customer();
-        $customer->read($sender_id);
+        $customer = Customer::getInstance($sender_id);
         $customer_name = $customer->getUsername();
    
     $notification_type='ok';

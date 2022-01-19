@@ -1,9 +1,49 @@
 <?php
 include 'header.php';
+$customer_id = $user->getCustomer_id();   
 
-$tradesman_id = $user->getTradesman_id(); 
+if (isset($_POST["saveReview"])) {
+    $review = $_POST["review"];
+    $review_hiring_id = $_POST["hiring_id"];
+    $sql = "UPDATE hiring SET review='{$_POST["review"]}' WHERE hiring_id='{$_POST["hiring_id"]}'";
+    QueryHandler::query($sql);
+}
 
+if (isset($_POST["saveRating"])) {
+    $rating = $_POST["ratingInput"];
+    $rating_hiring_id = $_POST["hiring_id"];
+    if ($rating > 0) {
+        $sql = "UPDATE hiring SET rating='{$_POST["ratingInput"]}' WHERE hiring_id= '{$_POST["hiring_id"]}'";
+        QueryHandler::query($sql);
+    }
+}
+
+if (isset($_POST["hireNow"])){
+    $hiring_id = $_POST["hiring_id"];
+
+    $hiring = new Hiring();
+    $hiring->read($hiring_id);
+
+    $tradesman_id = $hiring->getTradesman_id();
+    $service_id = $hiring->getService_id();
+            
+
+    $date = $_POST["date"];
+    $time = $_POST["time"];
+    $addressType= $_POST["flexRadioDefault"];
+    $latitude = $_POST["lat"];
+    $longitude = $_POST["lng"];
+    $address= $_POST["address-label"];
+    $final_status = "Scheduled";
+
+
+    $sql = "INSERT INTO hiring (tradesman_id, service_id, customer_id, completed_cancelled_date, final_status, latitude, longitude, address, time) VALUES ('$tradesman_id','$service_id','$customer_id','$date','$final_status','$latitude','$longitude','$address','$time')";
+
+    QueryHandler::query($sql);  
+    
+}
 ?>
+
 
 
 <!DOCTYPE html>
@@ -16,8 +56,7 @@ $tradesman_id = $user->getTradesman_id();
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
@@ -28,8 +67,15 @@ $tradesman_id = $user->getTradesman_id();
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <!-- for map -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script src="./index.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
     <title>My Hirings</title>
 </head>
 <style>
@@ -41,6 +87,7 @@ $tradesman_id = $user->getTradesman_id();
         padding: calc(5px + 0.5vw) calc(15px + 1vw);
 
     }
+    
 
     .myHiringsPage .heading {
 
@@ -118,12 +165,19 @@ $tradesman_id = $user->getTradesman_id();
     }
 
 
-    
+    .myHiringsPage .box h4 {
+        color: black;
+        width: fit-content;
 
-    .myHiringsPage .box .details {
+        border-bottom: solid #142f61;
+        border-width: 4px;
+        padding-bottom: 3px;
+    }
+
+    .myHiringsPage .box .name {
         font-weight: 600;
         margin-top: -8px;
-        font-size: 15px;
+        font-size: 17px;
     }
 
     .myHiringsPage .box .star {
@@ -198,6 +252,7 @@ $tradesman_id = $user->getTradesman_id();
     }
 
 
+
     .myHiringsPage .cancelledbtn {
         background-color: red;
         color: white;
@@ -229,7 +284,7 @@ $tradesman_id = $user->getTradesman_id();
     .myHiringsPage .loadMore:hover {
         color: white;
     }
-
+    
     .myHiringsPage .containofboxes {
         margin-left: -150px;
         margin-right: -150px;
@@ -378,6 +433,8 @@ $tradesman_id = $user->getTradesman_id();
         height: 22rem;
         background-color: rgb(218, 236, 247);
         border: solid #142f61;
+        padding: 0px;
+
     }
 
 
@@ -387,12 +444,6 @@ $tradesman_id = $user->getTradesman_id();
         border: solid #142f61;
         border-radius: 15px;
     }
-
-    .dropdownbtn {
-        background-color: #142f61;
-        font-weight: bold;
-        border: none;
-        }
 </style>
 
 <!-- star rating part css --------------------------------------->
@@ -410,7 +461,7 @@ $tradesman_id = $user->getTradesman_id();
         display: flex;
         align-items: center;
         justify-content: center;
-        
+
     }
 
 
@@ -440,11 +491,25 @@ $tradesman_id = $user->getTradesman_id();
         text-shadow: 0 0 20px #952;
     }
 
-   
+    
 
     .rating_modal .star_rating form {
         display: none;
-    }    
+    }
+
+    .dropdownbtn {
+        background-color: #142f61;
+        font-weight: bold;
+        border: none;
+        }
+
+        .dropdownbtn:focus {
+        box-shadow: none;
+        background-color: #142f61;
+        }
+        .dropdownbtn:hover {
+        background-color: #1d345f;
+        }   
 </style>
 
 
@@ -496,16 +561,16 @@ $tradesman_id = $user->getTradesman_id();
                 <div class="col">
                     
                     <div class="row containofboxes justify-content-center menu-tab-content active tabcontent" id="all">
-                        <?php showHirings("SELECT * FROM hiring WHERE tradesman_id = '$tradesman_id'") ?>
+                        <?php showHirings("SELECT * FROM hiring WHERE customer_id = '$customer_id'") ?>
                     </div>
                     <div class="row containofboxes justify-content-center menu-tab-content tabcontent" id="completed">
-                        <?php showHirings("SELECT * FROM hiring WHERE tradesman_id = '$tradesman_id' AND final_status = 'Completed'") ?>
+                        <?php showHirings("SELECT * FROM hiring WHERE customer_id = '$customer_id' AND final_status = 'Completed'") ?>
                     </div>
                     <div class="row containofboxes justify-content-center menu-tab-content tabcontent" id="scheduled">
-                        <?php showHirings("SELECT * FROM hiring WHERE tradesman_id = '$tradesman_id' AND final_status = 'Scheduled'") ?>
+                        <?php showHirings("SELECT * FROM hiring WHERE customer_id = '$customer_id' AND final_status = 'Scheduled'") ?>
                     </div>
                     <div class="row containofboxes justify-content-center menu-tab-content tabcontent" id="cancelled">
-                        <?php showHirings("SELECT * FROM hiring WHERE tradesman_id = '$tradesman_id' AND final_status = 'Cancelled'") ?>
+                        <?php showHirings("SELECT * FROM hiring WHERE customer_id = '$customer_id' AND final_status = 'Cancelled'") ?>
                     </div>
 
                 </div>
@@ -527,6 +592,7 @@ $tradesman_id = $user->getTradesman_id();
         </div>
     </section>
 
+
     <?php
     function showHirings($item_query)
     {
@@ -539,9 +605,8 @@ $tradesman_id = $user->getTradesman_id();
 
             $hiring = new Hiring();
             $hiring->read($hiring_id);
-           
 
-            $customer_id = $hiring->getCustomer_id();
+            $tradesman_id = $hiring->getTradesman_id();
             $service_id = $hiring->getService_id();
             $dateTime = $hiring->getCompleted_cancelled_date();
             $hiring_amount = $hiring->getHiring_amount();
@@ -549,18 +614,22 @@ $tradesman_id = $user->getTradesman_id();
             $rating = $hiring->getRating();
             $review = $hiring->getReview();
             $final_status = $hiring->getFinal_status();
-            $hiring_id = $hiring->getHiring_id();
             $time = $hiring->getTime();
 
-            $service_name = $hiring->getService_name($service_id);
-            
-            $customer = Customer::getInstance($customer_id);
-            $customer_name = $customer->getFirstname();
-            $customer_address = $customer->getAddress();  //address may be changed
-            $profile = $customer->getImg();
 
 
+
+
+
+            $provider_name = $hiring->getProvider_name($service_id);
             
+            $tradesman = Tradesman::getInstance($tradesman_id);
+            if(!is_null($tradesman)){
+                $tradesman_username = $tradesman->getUsername();
+                $average_rating = $tradesman->getAverage_rating();
+                $profile = $tradesman->getImg();
+                
+            }
 
 
 
@@ -571,25 +640,24 @@ $tradesman_id = $user->getTradesman_id();
             <div class="col-xxl-3 col-lg-4 col-md-5 col-sm-7 col-xs-8 col-9  box">
                 <div class="row justify-content-between">
                     <div class="col-2">
-                        <img id="" class="profile" src="<?php echo $profile ?>" alt="profile">    
+                        <img id="" class="profile" src="<?php echo $profile ?>" alt="profile">
 
                     </div>
                     <div class="col-8 col-xs-8 col-sm-9 col-md-9">
-                        <p class="details">
-                            ID No    : <?php echo $hiring_id ?>
+                        <h4 class="pe-5">
+                            <?php echo $provider_name ?>
+                        </h4>
+                        <p class="name">
+                            <?php echo $tradesman_username ?> - <?php echo $average_rating ?>
+                            <span id="" class="material-icons star"> grade</span>
                             <br>
-                            Name     : <?php echo $customer_name ?>
-                            <br>
-                            Address  : <?php echo $customer_address ?>
-                            
-                            <br>
+
                             <?php
                             $date = date_create($dateTime);
                             echo date_format($date, "Y M d"); 
                             echo " @";
-                            echo $time;  ?>
-                            <br>
-                            <?php echo $service_name ?>
+                            echo $time; 
+                            ?>
                         </p>
 
                     </div>
@@ -622,7 +690,7 @@ $tradesman_id = $user->getTradesman_id();
                                 <div class="col-4 ">
                                     Your Rating: </div>
                                 <div class="col-8 ">
-                                    Not given
+                                    <button class="btn rating giveReview fw-bold" id="rating" onclick="saveRating(<?php echo $hiring_id ?>)">Give Rating</button>
                                 </div>
                             </div>
                         <?php
@@ -652,9 +720,8 @@ $tradesman_id = $user->getTradesman_id();
                                     Your Review:
                                 </div>
                                 <div class="col-8">
-                                    <span class=""> 
-                                        Not Given
-                                    </span>
+                                    <span class="review"> <button onclick="saveReview(<?php echo $hiring_id ?>)" class="btn giveReview fw-bold" type="button">Write
+                                            Review </button></span>
 
                                 </div>
                             </div>
@@ -685,6 +752,9 @@ $tradesman_id = $user->getTradesman_id();
                                     <?php echo $final_status;
                                     echo " hiring"; ?>
                                 </button>
+                            </div>
+                            <div class="col text-center">
+                                <button class="btn button hirebtn fw-bold" id="hire_him_again" onclick="hireNow(<?php echo $hiring_id ?>)" type="button">Hire him again </button>
                             </div>
                         </div>
                     </div>
@@ -739,7 +809,9 @@ $tradesman_id = $user->getTradesman_id();
                                     echo " hiring"; ?>
                                 </button>
                             </div>
-                            
+                            <div class="col text-center">
+                                <button class="btn button hirebtn fw-bold" id="hire_him_again" onclick="hireNow(<?php echo $hiring_id ?>)" type="button">Hire him again </button>
+                            </div>
                         </div>
                     </div>
                 <?php
@@ -793,7 +865,9 @@ $tradesman_id = $user->getTradesman_id();
                                     echo " hiring"; ?>
                                 </button>
                             </div>
-                            
+                            <div class="col text-center">
+                                <button class="btn button hirebtn fw-bold" id="hire_him_again" onclick="hireNow(<?php echo $hiring_id ?>)" type="button">Hire him again </button>
+                            </div>
                         </div>
                     </div>
                 <?php
@@ -806,18 +880,185 @@ $tradesman_id = $user->getTradesman_id();
     }
     ?>
 
+
+
+
+
+    <!-- MODAL  hire_him_again  -->
     
-    
-    
+    <div class="modal fade " id="modal_hire_him_again">
+        <div class="modal-dialog modal-dialog-centered" id="modalBoxWidth">
+            <!-- Modal content-->
+            <div class="modal-content  mx-3">
+                <div class="modal-header text-white py-1 m-0" id="modalTitle">
+                    <h5 class="address-label-title">Register Details</h5>
+                    <button type="button" class="btn-close bg-white text-white fw-bold" data-bs-dismiss="modal" aria-label="Close" id="closeHireagain" onclick=""></button>
+                </div>
+
+                <form action="sample_myHiring.php" method="POST">
+
+                <div class="row fw-bold mx-2">
+                    <div class="col-12 col-md-6">
+                        <div class="fw-bold h5" id="dateAndTime">
+                            Select Date and Time
+                        </div>
+                        <div class="row my-1">
+                            <div class="col-3 col-md-2 mt-2">Date</div>
+                            <div class="col-6 col-md-10">
+                                <input type="date" name="date" class="form-control" placeholder="" />
+                            </div>
+                        </div>
+                        <div class="row my-1">
+                            <div class="col-3 col-md-2  mt-2">Time</div>
+                            <div class="col-6 col-md-10">
+                                <input type="time" name="time" class="form-control" placeholder="" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="fw-bold h5" id="dateAndTime">
+                            Select Location
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="default">
+                            <label class="form-check-label" for="flexRadioDefault1">
+                                Use default Address
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked value="new">
+                            <label class="form-check-label" for="flexRadioDefault2">
+                                Pick new Address
+                            </label>
+                        </div>
+
+                    </div>
+                </div>
+                <input type="hidden" name="hiring_id" id="hireNow1" value="">
+
+                <input type="hidden" name="lat" id="lat" value="">
+                <input type="hidden" name="lng" id="lng" value="">
+                <input type="hidden" name="address-label" id="address-label" value="">
+
+
+
+
+
+
+                <div id="tradesman_map " class="row mx-3 p-0">
+
+                    <div id="fixed_map">
+                        <div class="location-map" id="location-map">
+                            <div style="width: 100%; height: 21.5rem;" class="m-0" id="map"></div>
+                        </div>
+                    </div>
+                </div>
+                
+
+
+                <div class=" d-flex flex-row-reverse mx-3">
+                    <div class="">
+                        <button type="submit" class="close btn text-white fw-bold mt-2 mb-3" name="hireNow" style="background-color:#142f61">
+                            Hire Now
+                        </button>
+                    </div>
+                </div>
+
+                </form>
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- give rating part ------------------------------------------------------->
+    <div class="modal fade rating_modal " id="modal_rating">
+        <div class="modal-dialog modal-dialog-centered" id="modalBoxWidth">
+            <!-- Modal content-->
+            <div class="modal-content  mx-3">
+                <div class="modal-header text-white py-1 m-0" id="modalTitle">
+                    <h5 class="modal-title">Give Rating</h5>
+                    <button type="button" id="closeRating" class="btn-close bg-white text-white fw-bold" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+
+                <form action="sample_myHiring.php" method="POST">
+                    <div class="star_rating">
+
+                        <div class="star-widget" name="rating">
+                            <input type="radio" name="rate" id="rate-5">
+                            <label for="rate-5" class="fas fa-star"></label>
+                            <input type="radio" name="rate" id="rate-4">
+                            <label for="rate-4" class="fas fa-star"></label>
+                            <input type="radio" name="rate" id="rate-3">
+                            <label for="rate-3" class="fas fa-star"></label>
+                            <input type="radio" name="rate" id="rate-2">
+                            <label for="rate-2" class="fas fa-star"></label>
+                            <input type="radio" name="rate" id="rate-1">
+                            <label for="rate-1" class="fas fa-star"></label>
+
+                        </div>
+                        <input type="hidden" name="ratingInput" id="ratingInput" value="">
+                        <input type="hidden" name="hiring_id" id="rating1" value="">
+
+                    </div>
+
+
+                    <div class=" d-flex flex-row-reverse mx-4 mb-3">
+                        <div class="">
+                            <button class="close btn text-white fw-bold mt-1 px-5" name="saveRating" style="background-color:#142f61">
+                                Save
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- write review part ------------------------------------------------------->
+    <div class="modal fade " id="modal_review">
+        <div class="modal-dialog modal-dialog-centered" id="modalBoxWidth">
+            <!-- Modal content-->
+            <div class="modal-content  mx-3">
+                <div class="modal-header text-white py-1 m-0" id="modalTitle">
+                    <h5 class="modal-title">Write Review</h5>
+                    <button type="button" id="closeReview" class="btn-close bg-white text-white fw-bold" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+
+                <form action="sample_myHiring.php" method="POST">
+                    <div id="" class="row mx-4 my-3 ">
+
+                        <textarea name="review" id="review" cols="30" rows="10" class="review_box p-3" placeholder="Write your review here.(maximum 20 words)"></textarea>
+
+                    </div>
+                    <input type="hidden" name="hiring_id" id="review1" value="">
+
+
+                    <div class=" d-flex flex-row-reverse mx-4 mb-3">
+                        <div class="">
+                            <button type="submit" name="saveReview" class="close btn text-white fw-bold mt-1 px-5" style="background-color:#142f61">
+                                Save
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
 
     
 
 
-
-    
-<script>
-    
-        //$("#abc12").addClass("active");
+    <script>
         //code for tab active change----------------------------------------------------------------------------------------
         var typeContainer = document.getElementById("types");
 
@@ -831,10 +1072,65 @@ $tradesman_id = $user->getTradesman_id();
             });
         }
 
-        
+        //code for model--------------------------------------------------------------------------------------------------------
+
+        $(document).ready(function() {
+            $("#closeHireagain").click(function() {
+                $("#modal_hire_him_again").modal('toggle');
+            });
+        });
 
 
-        
+
+        $(document).ready(function() {
+            $("#closeReview").click(function() {
+                $("#modal_review").modal('toggle');
+            });
+        });
+
+
+        function saveReview(id) {
+            $("#modal_review").modal({
+                show: true
+            });
+            $("#review1").val(id);
+        }
+
+        function saveRating(id) {
+            $("#modal_rating").modal({
+                show: true
+            });
+            $("#rating1").val(id);
+        }
+
+
+        $(document).ready(function() {
+            $("#closeRating").click(function() {
+                $("#modal_rating").modal('toggle');
+            });
+        });
+
+
+
+        function hireNow(id){
+            $("#modal_hire_him_again").modal({
+                show: true
+            });
+            $("#hireNow1").val(id);
+        }
+
+
+
+        //script code for give rating part---------------------------------------------------------------------------------------
+        const widget = document.querySelectorAll(".star-widget .fas");
+        widget.forEach((star, idx) => {
+            star.addEventListener("click", () => {
+                var rating = 5 - idx;
+
+                document.getElementById("ratingInput").value = rating;
+            })
+        })
+
 
         //script code for different tabs-------------------------------------------------------------------------------------------
         function openPage(pageName) {
@@ -850,13 +1146,21 @@ $tradesman_id = $user->getTradesman_id();
 
         }
         document.getElementById("defaultOpen").click();
+
+        
     </script>
+
+
+
+    
+    <!--You have to paste your API key in the following link-->
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB2psniVzC9cwc5r1b6xt3ggfhFUt0DvsA&callback=initMap"></script>
+    
+
 
 
 </body>
 
 </html>
-
-<?php
-include "footer.php";
-?>
+<?php include 'footer.php' ?>
