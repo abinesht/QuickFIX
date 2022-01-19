@@ -276,11 +276,58 @@
     }
 
     .dropdownbtn {
-  background-color: #142f61;
-  font-weight: bold;
-  border: none;
-}
+    background-color: #142f61;
+    font-weight: bold;
+    border: none;
+    }
     
+    .hire_now_button {
+        width: 14rem;
+        color: rgb(255, 255, 255);
+        background-color: #142f61;
+    }
+    .schedule_hiring_button {
+            color: rgb(0, 0, 0);
+            background-color: #F6E92F;
+            width: 14rem;
+    }
+        .dropdownbtn {
+    background-color: #142f61;
+    font-weight: bold;
+    border: none;
+    }
+
+    .dropdownbtn:focus {
+    box-shadow: none;
+    background-color: #142f61;
+    }
+    .dropdownbtn:hover {
+    background-color: #1d345f;
+    }
+
+        .register{
+        background-color:#142F61;
+        font-weight: bold;
+        border: none;
+        
+    }
+
+    .register:focus{
+        box-shadow: none;
+        background-color: #142F61;
+    }
+    .register:hover{
+        background-color:#1d345f;
+    }
+
+    .form-checkbox:checked {
+    background-color: #1d345f;
+    }
+
+
+    .form-textarea{
+    resize: none;
+    }
 </style>
 <!-- ----------------------------------------------------------------------------------------------------- -->
 
@@ -295,7 +342,7 @@
                 <div class="col-lg-2 col-md-4 text-center footer1 footer1234">
                     <div class="row">
                         <div class="col logo">
-                            <img src="images/logo_footer.png" alt="QuickFIX" width="130">
+                            <img src="Assets/Images/logo_footer.png" alt="QuickFIX" width="130">
                         </div>
                         <div class="col mt-2 mb-3">
                             <span>

@@ -55,16 +55,16 @@ $htmlContent = "";
 
       while ($row = mysqli_fetch_assoc($result)) {
         // $tradesmanObject = new Customer($row['customer_id']);
-        $tradesmanObject = new Tradesman();
-        $tradesmanObject->read($row['tradesman_id']);
-        
-        if (date('m', strtotime($row['date'])) == $current_month  && date('Y', strtotime($row['date'])) == $current_year) {
-          $count = $count + 1;
+        $tradesmanObject = Tradesman::getInstance($row['tradesman_id']);
+        if(!is_null($tradesmanObject)){
+          if (date('m', strtotime($row['date'])) == $current_month  && date('Y', strtotime($row['date'])) == $current_year) {
+            $count = $count + 1;
 
-          $calendar->add_event($tradesmanObject->getUsername(), $row['date'], 1, 'green', $row['time']);
-          echo  '<li class="fw bold h5">' . date('M j ,', strtotime($row['date'])) . ' ' . date('g:i a', strtotime($row['time'])) . ' - ' . $tradesmanObject->getUsername() . ' - ' . $row['service_name'] . '</li>';
-        } else {
-          echo '<script>console.log("schedule not suit");</script>';
+            $calendar->add_event($tradesmanObject->getUsername(), $row['date'], 1, 'green', $row['time']);
+            echo  '<li class="fw bold h5">' . date('M j ,', strtotime($row['date'])) . ' ' . date('g:i a', strtotime($row['time'])) . ' - ' . $tradesmanObject->getUsername() . ' - ' . $row['service_name'] . '</li>';
+          } else {
+            echo '<script>console.log("schedule not suit");</script>';
+          }
         }
       }
       if ($count == 0) {
